@@ -23,6 +23,7 @@ module.exports = {
       },
       colors: {
         pharmaticFade: "hsla(180, 100%, 95%, 0.6)",
+        pharmaticPrimary: "hsla(186, 78%, 42%, 1)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
