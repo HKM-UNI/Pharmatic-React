@@ -1,10 +1,18 @@
 import { NavLink } from "react-router-dom";
+import {
+  DashBoardIcon,
+  UserIcon,
+  DropBoxIcon,
+  BagIcon,
+  Setting3Icon,
+  ChemicalGlassIcon,
+} from "/src/icons";
 
 const pharmaticLink =
-  "px-6 py-2 transition-all duration-300 w-11/12 text-lg font-bold";
+  "flex items-center px-6 py-2 transition-all duration-300 w-11/12 text-lg font-bold";
 
 const pharmaticSubLink =
-  "pr-6 pl-12 py-1 transition-all duration-300 w-11/12 text-md font-bold";
+  "flex items-center pr-6 pl-12 py-1 transition-all duration-300 w-11/12 text-md font-bold";
 
 const pharmaticActiveLink =
   "bg-pharmaticPrimary/20 text-pharmaticPrimary rounded-r-3xl";
@@ -20,39 +28,42 @@ function NavigationLinks() {
   return (
     <nav className="flex flex-col space-y-2">
       <NavLink to="/" className={({ isActive }) => getLinkStyle(isActive)}>
+        <UserIcon className="w-6 h-6 mr-3" />
         Login
       </NavLink>
-      <NavLink to="/about" className={({ isActive }) => getLinkStyle(isActive)}>
-        {" "}
-        About{" "}
-      </NavLink>
       <NavLink
-        to="/contact"
+        to="/dashboard"
         className={({ isActive }) => getLinkStyle(isActive)}
       >
-        {" "}
-        Contact{" "}
+        <DashBoardIcon className="w-6 h-6 mr-3" />
+        Dashboard
       </NavLink>
 
-      <h3 className="gap-2 px-6 py-2 text-lg font-bold">Sub Links</h3>
+      <div className="flex items-center px-6 py-2">
+        <DropBoxIcon className="w-6 h-6 mr-3" />
+        <p className="text-lg font-bold">Inventario</p>
+      </div>
 
       <NavLink
-        to="/sub1"
+        to="/productos"
         className={({ isActive }) => getLinkStyle(isActive, true)}
       >
-        SubLink
+        <BagIcon className="w-6 h-6 mr-3" />
+        Productos
       </NavLink>
       <NavLink
-        to="/sub2"
+        to="/metadata"
         className={({ isActive }) => getLinkStyle(isActive, true)}
       >
-        SubLink
+        <Setting3Icon className="w-6 h-6 mr-3" />
+        Metadata
       </NavLink>
       <NavLink
-        to="/sub3"
+        to="/composiciones"
         className={({ isActive }) => getLinkStyle(isActive, true)}
       >
-        SubLink
+        <ChemicalGlassIcon className="w-6 h-6 mr-3" />
+        Composiciones
       </NavLink>
     </nav>
   );
