@@ -39,7 +39,7 @@ function NavigationLinks() {
         Dashboard
       </NavLink>
 
-      <div className="flex items-center px-6 py-2">
+      <div className="flex items-center px-6 py-2 cursor-default">
         <DropBoxIcon className="w-6 h-6 mr-3" />
         <p className="text-lg font-bold">Inventario</p>
       </div>

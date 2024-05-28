@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,5 +9,44 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <style>
+      .loader-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #17acbe;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        margin-top: 24px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+    </style>
+    <div class="loader-container">
+      <div class="logo-container">
+          <img src="/assets/Pharmatic 2.png" style="width:180px; display: block; margin: auto;">
+          <img src="/assets/Pharmatic 1.png" style="width:280px; display: block; margin: auto;">
+      </div>
+      <div class="loader"></div>
+  </div>
+
+</div>
   </body>
 </html>
