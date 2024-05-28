@@ -9,10 +9,10 @@ import {
 } from "/src/icons";
 
 const pharmaticLink =
-  "flex items-center px-6 py-2 transition-all duration-300 w-[90%] text-lg font-bold";
+  "flex items-center px-6 py-2 transition-all duration-300 w-[90%] text-md font-bold";
 
 const pharmaticSubLink =
-  "flex items-center pr-6 pl-12 py-1 transition-all duration-300 w-[90%] text-md font-bold";
+  "flex items-center pr-6 pl-12 py-1 transition-all duration-300 w-[90%] text-sm font-bold";
 
 const pharmaticActiveLink =
   "bg-pharmaticPrimary/20 text-pharmaticPrimary rounded-r-3xl";
