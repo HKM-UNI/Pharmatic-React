@@ -11,7 +11,7 @@ function Drawer() {
 
 function MainDrawer() {
   return (
-    <div className="h-full w-1/5 bg-white mr-6 rounded-xl hidden md:block">
+    <div className="h-full w-[20%] bg-white mr-6 rounded-xl hidden md:block">
       <PharmaticLogo />
       <NavigationLinks />
     </div>
