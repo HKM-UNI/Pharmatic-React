@@ -1,9 +1,10 @@
-import AppBar from "./AppBar";
-import NavigationMenu from "./NavigationMenu";
-import MainContent from "./MainContent";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "@/icons";
+import CustomersView from "@/pages/CustomersView";
+import AppBar from "./AppBar";
+import MainContent from "./MainContent";
+import NavigationMenu from "./NavigationMenu";
 
 function MainLayout() {
   return (
@@ -27,7 +28,9 @@ function MainLayout() {
           </SheetContent>
         </Sheet>
 
-        <MainContent />
+        <MainContent>
+          <CustomersView />
+        </MainContent>
       </div>
     </div>
   );
