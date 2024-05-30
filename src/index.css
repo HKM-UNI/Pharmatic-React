@@ -78,3 +78,28 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Scrollbar */
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.5rem;
+  position: absolute;
+  /* margin-right: 0.5rem; */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: hsla(186, 62%, 31%, 0.466);
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: hsla(186, 62%, 31%, 0.8);
+}
