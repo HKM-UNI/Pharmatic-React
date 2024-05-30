@@ -22,7 +22,7 @@ function MainLayout() {
             </SheetTrigger>
           </AppBar>
 
-          <SheetContent className="flex flex-col">
+          <SheetContent side="left" className="flex flex-col overflow-y-auto">
             <NavigationMenu />
           </SheetContent>
         </Sheet>
