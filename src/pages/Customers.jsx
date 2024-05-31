@@ -29,7 +29,7 @@ export default function Customers() {
               <Button className="rounded-3xl" size="sm">
                 Editar
               </Button>
-              <Button className="rounded-3xl bg-red-500" size="sm">
+              <Button className="rounded-3xl" size="sm" variant="delete">
                 Eliminar
               </Button>
             </>
