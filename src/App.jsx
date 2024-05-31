@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SWRConfig } from "swr";
 import Login from "./pages/Login";
 import MainLayout from "./shared/MainLayout";
+import NotFound from "./pages/NotFound";
+import Customers from "./pages/Customers";
 
 init_axios_defaults();
 
@@ -16,7 +18,15 @@ function App() {
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<MainLayout />}>
+            <Route index path="dashboard" element={<NotFound />} />
+            <Route path="clientes" element={<Customers />} />
+            <Route path="productos" element={<NotFound />} />
+            <Route path="metadata" element={<NotFound />} />
+            <Route path="composiciones" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
           <Route path="*" element={<MainLayout />} />
         </Routes>
       </BrowserRouter>

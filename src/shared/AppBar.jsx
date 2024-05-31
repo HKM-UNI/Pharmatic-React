@@ -19,7 +19,7 @@ import {
 
 function AppBar({ children }) {
   return (
-    <div className="w-full h-[14%] bg-white rounded-t-xl py-4 px-4 lg:px-10 flex items-center justify-between">
+    <div className="w-full h-[10%] bg-white rounded-t-xl py-4 px-4 lg:px-10 flex items-center justify-between">
       <div className="flex items-center gap-x-3">
         {children}
         <Breadcrumb>

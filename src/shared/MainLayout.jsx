@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "@/icons";
-import CustomersView from "@/pages/CustomersView";
 import AppBar from "./AppBar";
 import MainContent from "./MainContent";
 import NavigationMenu from "./NavigationMenu";
+import { Outlet } from "react-router-dom";
 
 function MainLayout() {
   return (
-    <div className="flex h-dvh p-2 lg:p-4 lg:p-6">
-      <div className="h-full w-[18%] bg-white mr-6 rounded-xl hidden lg:flex flex-col">
+    <div className="flex h-dvh p-2 lg:p-4">
+      <div className="h-full w-[16%] bg-white mr-6 rounded-xl hidden lg:flex flex-col">
         <NavigationMenu />
       </div>
 
-      <div className="w-full lg:w-[82%] h-full">
+      <div className="w-full lg:w-[84%] h-full">
         <Sheet>
           <AppBar>
             <SheetTrigger className="block lg:hidden">
@@ -29,7 +29,7 @@ function MainLayout() {
         </Sheet>
 
         <MainContent>
-          <CustomersView />
+          <Outlet />
         </MainContent>
       </div>
     </div>
