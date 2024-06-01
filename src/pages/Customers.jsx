@@ -1,27 +1,49 @@
 import { Button } from "@/components/ui/button";
 import PharmaticCard from "@/components/ui/pharmatic-card";
 import { useCustomers } from "@/hooks/customer_hooks";
+import { UserMaleIcon, UserFemaleIcon } from "@/icons";
+import {
+  CalendarDays,
+  CalendarOff,
+  Mail,
+  MailX,
+  Phone,
+  PhoneOff,
+} from "lucide-react";
 
 export default function Customers() {
-  const [customers, error, isLoading] = useCustomers();
+  const [customers, _, error, isLoading] = useCustomers();
   if (error) {
     return <p>Failed to fetch customers</p>;
   }
   if (isLoading) {
     return <p>Loading customers..</p>;
   }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 bg-white rounded-2xl p-3 h-full overflow-auto">
-      {customers.map((c, i) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-3">
+      {customers.map((c) => (
         <PharmaticCard
-          key={i}
-          title={`${c.name} ${c.surname}`}
+          key={c.customerNo}
+          title={
+            <div className="flex gap-2 items-center">
+              <span className="w-12">
+                {c.gender == "M" ? <UserMaleIcon fill="#424242" /> : <UserFemaleIcon fill="#424242" />}
+              </span>
+              {c.name} {c.surname}
+            </div>
+          }
           info={
             <>
-              <p className="text-blue-600">{c.email}</p>
-              <p className="text-green-600">{c.phone}</p>
-              <p>{c.birthDate}</p>
-              <p>{c.gender}</p>
+              <div className="flex gap-2 items-center text-blue-600 my-1">
+                {c.email ? <Mail /> : <MailX />} {c.email}
+              </div>
+              <div className="flex gap-2 items-center text-green-600 my-1">
+                {c.phone ? <Phone /> : <PhoneOff />} {c.phone}
+              </div>
+              <div className="flex gap-2 items-center my-1">
+                {c.birthDate ? <CalendarDays /> : <CalendarOff />} {c.birthDate}
+              </div>
             </>
           }
           actions={
