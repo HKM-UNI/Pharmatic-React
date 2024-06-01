@@ -8,7 +8,7 @@ function NavigationMenu() {
       <PharmaticLogo />
       <div className="flex-1 flex flex-col justify-between">
         <NavigationLinks />
-        <div className="w-full text-center px-5 py-2 hidden lg:block">
+        <div className="w-full text-center px-5 py-2 hidden xl:block">
           <Separator className="my-2 h-0.5 bg-gray-300" />
           <PharmaticTime />
         </div>

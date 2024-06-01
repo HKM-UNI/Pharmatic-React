@@ -11,7 +11,7 @@ export default function Customers() {
     return <p>Loading customers..</p>;
   }
   return (
-    <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-3 h-full overflow-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 bg-white rounded-2xl p-3 h-full overflow-auto">
       {customers.map((c, i) => (
         <PharmaticCard
           key={i}

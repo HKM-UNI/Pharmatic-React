@@ -9,8 +9,8 @@ function Login() {
     <div className="flex h-dvh justify-center items-center">
       <LoginContainer>
         <PillsBackground />
-        <div className="flex w-full lg:w-1/2 h-full bg-white rounded-r-xl justify-center">
-          <LoginForm fakeLogin={() => navigate("/main-layout")} />
+        <div className="flex w-full xl:w-1/2 h-full bg-white rounded-r-xl justify-center">
+          <LoginForm fakeLogin={() => navigate("/")} />
         </div>
       </LoginContainer>
     </div>
@@ -27,7 +27,7 @@ function LoginContainer({ children }) {
 
 function PillsBackground() {
   return (
-    <div className="w-1/2 h-full hidden lg:block bg-pills-background bg-cover rounded-l-xl"></div>
+    <div className="w-1/2 h-full hidden xl:block bg-pills-background bg-cover rounded-l-xl"></div>
   );
 }
 

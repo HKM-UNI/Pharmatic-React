@@ -19,7 +19,7 @@ import {
 
 function AppBar({ children }) {
   return (
-    <div className="w-full h-[10%] bg-white rounded-t-xl py-4 px-4 lg:px-10 flex items-center justify-between">
+    <div className="w-full h-[10%] bg-white rounded-t-xl py-4 px-4 xl:px-10 flex items-center justify-between">
       <div className="flex items-center gap-x-3">
         {children}
         <Breadcrumb>
@@ -48,13 +48,13 @@ function UserCard() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="lg:hover:bg-gray-100 rounded-xl px-3 py-1">
+        <div className="xl:hover:bg-gray-100 rounded-xl px-3 py-1">
           <div className="flex h-full items-center gap-x-3.5 spacing">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col hidden lg:block cursor-default">
+            <div className="flex flex-col hidden xl:block cursor-default">
               <p className="font-bold">José Ramírez</p>
               <p className="">correo@etc.com</p>
             </div>
