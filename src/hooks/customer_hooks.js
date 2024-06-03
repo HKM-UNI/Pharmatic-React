@@ -1,11 +1,92 @@
-import useSWR from "swr";
 import { Customer } from "@/data/customer";
+import axios from "axios";
+import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 
 /**
- * @returns {[Array<Customer>, any, boolean]}
+ * @param {number} id
+ * @returns {[Customer, Error]}
+ */
+export function useCustomerData(id) {
+  const { data, error } = useSWR(id ? `customers/${id}` : null);
+
+  return [data, error];
+}
+
+/**
+ * Updates the customers list via API
+ * @callback customerListUpdateTrigger
+ * @param {Array<Customer>} data
+ */
+
+/**
+ * @returns {[Array<Customer>, boolean, Error | null | undefined, customerListUpdateTrigger]}
  */
 export function useCustomers() {
-  const { data, error, isLoading } = useSWR("customers");
+  const { data, isLoading, error, mutate } = useSWR("customers");
 
-  return [data, error, isLoading];
+  return [data, isLoading, error, mutate];
+}
+
+/**
+ * Creates a customer via API
+ * @async
+ * @callback customerCreateTrigger
+ * @param {Customer} data
+ * @returns {Promise}
+ */
+
+/**
+ * @returns {[customerCreateTrigger, boolean, Error | null | undefined]}
+ */
+export function useCreateCustomer() {
+  const createCustomer = async (url, { arg: data }) =>
+    axios.post(url, data).then((resp) => resp.data);
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    "customers/create",
+    createCustomer
+  );
+
+  return [trigger, isMutating, error];
+}
+
+/**
+ * @returns {[customerCreateTrigger, boolean, Error | null | undefined]}
+ */
+export function useUpdateCustomer() {
+  const updateCustomer = async (url, { arg: data }) =>
+    axios
+      .patch(url.replace("update_id", data.customerNo), data)
+      .then((resp) => resp.data);
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    `customers/update_id`,
+    updateCustomer
+  );
+
+  return [trigger, isMutating, error];
+}
+
+/**
+ * Deletes a customer via API
+ * @async
+ * @callback customerDeleteTrigger
+ * @param {number} id
+ * @returns {Promise}
+ */
+
+/**
+ * @returns {[customerDeleteTrigger, boolean, Error | null | undefined]}
+ */
+export function useDeleteCustomer() {
+  const deleteCustomer = async (url, { arg: id }) =>
+    axios.delete(url.replace("delete_id", id));
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    `customers/delete_id`,
+    deleteCustomer
+  );
+
+  return [trigger, isMutating, error];
 }

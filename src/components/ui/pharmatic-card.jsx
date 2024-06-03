@@ -2,7 +2,7 @@ import React from "react";
 
 function PharmaticCard({ imageSrc, title, info, actions }) {
   return (
-    <div className="flex flex-wrap rounded-lg shadow-md p-2 bg-gray-100">
+    <div className="flex flex-col rounded-lg shadow-md p-2 bg-gray-100">
       <PharmaticCardImage src={imageSrc} />
       <PharmaticCardContent>
         <PharmaticCardTitle title={title} />
@@ -35,7 +35,7 @@ function PharmaticCardInfo({ info }) {
 }
 
 function PharmaticCardActions({ actions }) {
-  return <div className="w-full grid grid-cols-2 gap-2">{actions}</div>;
+  return <div className="grid grid-cols-2 gap-2">{actions}</div>;
 }
 
 export default PharmaticCard;
