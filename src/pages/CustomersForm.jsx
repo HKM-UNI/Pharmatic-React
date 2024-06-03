@@ -19,6 +19,7 @@ import {
 } from "@/hooks/customer_hooks";
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo } from "react";
+import DynamicPanel from "@/shared/DynamicPanel";
 
 /* 
   Este es un esquema para declarar los campos y tipos de datos que llevará el formulario,
@@ -90,7 +91,7 @@ export default function CustomersForm({ edit = false }) {
      Puede no ser necesario dado que SWR también implementa una caché. */
     defaultValues: useMemo(
       () => customerData || customerDefaults,
-      [customerData]
+      [customerData],
     ),
   });
 
@@ -151,28 +152,32 @@ export default function CustomersForm({ edit = false }) {
       "onValidSubmit" es una función que se llamará con los datos del formulario, solo si es válido
       (debe cumplir con los validadores).
     */
-    <Form
-      form={form}
-      onValidSubmit={handleSubmit}
-      className="h-full py-5 px-10"
-    >
-      <div className="flex flex-wrap w-full justify-between items-center">
-        <h2 className="font-bold text-lg w-full mb-8 sm:w-auto sm:mb-0">
-          {edit ? "Editar" : "Nuevo"} cliente
-        </h2>
 
-        <div className="flex items-center gap-3 text-end w-full sm:w-auto">
+    <DynamicPanel
+      leftActions={
+        <>
+          <h2 className="mb-8 w-full text-lg font-bold sm:mb-0 sm:w-auto">
+            {edit ? "Editar" : "Nuevo"} cliente
+          </h2>
+        </>
+      }
+      rightActions={
+        <>
           <Button variant="destructive" onClick={handleCancelation}>
             Cancelar
           </Button>
           <Button>{buttonSubmitContent()}</Button>
-        </div>
-      </div>
-
-      <div className="flex justify-center pb-10 pt-5 md:pt-16">
-        <div className="grid grid-cols-1 gap-3 md:gap-4 w-80 md:grid-cols-2 md:w-2/3">
-
-          {/* Estos son componentes personalizados para USARSE SOLO CON EL COMPONENTE "Form",
+        </>
+      }
+    >
+      <Form
+        form={form}
+        onValidSubmit={handleSubmit}
+        className="h-full px-10 py-5"
+      >
+        <div className="flex justify-center pb-10 pt-5 md:pt-16">
+          <div className="grid w-80 grid-cols-1 gap-3 md:w-2/3 md:grid-cols-2 md:gap-4">
+            {/* Estos son componentes personalizados para USARSE SOLO CON EL COMPONENTE "Form",
             ya que usan un contexto específico.
 
             "fieldname" debe llamarse igual que el campo a controlar en el esquema,
@@ -180,31 +185,32 @@ export default function CustomersForm({ edit = false }) {
 
             Para mas detalles, ver los componentes en el archivo /src/components/custom_form/form
           */}
-          <FormInput fieldname="name" label="Nombre" placeholder="Juan" />
-          <FormInput fieldname="surname" label="Apellido" placeholder="Doe" />
-          <FormInput
-            type="email"
-            fieldname="email"
-            label="Correo Electrónico"
-            placeholder="juan.doe@gmail.com"
-          />
-          <FormInput
-            type="number"
-            fieldname="phone"
-            label="Número de teléfono"
-            placeholder="89764532"
-          />
-          <FormSelect
-            fieldname="gender"
-            label="Sexo"
-            options={[
-              { label: "Masculino", value: "M" },
-              { label: "Femenino", value: "F" },
-            ]}
-          />
-          <DatePicker fieldname="birthDate" label="Fecha" />
+            <FormInput fieldname="name" label="Nombre" placeholder="Juan" />
+            <FormInput fieldname="surname" label="Apellido" placeholder="Doe" />
+            <FormInput
+              type="email"
+              fieldname="email"
+              label="Correo Electrónico"
+              placeholder="juan.doe@gmail.com"
+            />
+            <FormInput
+              type="number"
+              fieldname="phone"
+              label="Número de teléfono"
+              placeholder="89764532"
+            />
+            <FormSelect
+              fieldname="gender"
+              label="Sexo"
+              options={[
+                { label: "Masculino", value: "M" },
+                { label: "Femenino", value: "F" },
+              ]}
+            />
+            <DatePicker fieldname="birthDate" label="Fecha" />
+          </div>
         </div>
-      </div>
-    </Form>
+      </Form>
+    </DynamicPanel>
   );
 }
