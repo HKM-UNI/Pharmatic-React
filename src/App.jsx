@@ -7,6 +7,7 @@ import MainLayout from "./shared/MainLayout";
 import NotFound from "./pages/NotFound";
 import Customers from "./pages/Customers";
 import Providers from "./pages/Providers";
+import CustomersForm from "./pages/CustomersForm";
 
 init_axios_defaults();
 
@@ -24,6 +25,11 @@ function App() {
             <Route index path="dashboard" element={<NotFound />} />
             <Route path="clientes" element={<Customers />} />
             <Route path="proveedores" element={<Providers />} />
+            <Route path="clientes/agregar" element={<CustomersForm />} />
+            <Route
+              path="clientes/editar/:customerId"
+              element={<CustomersForm edit={true} />}
+            />
             <Route path="productos" element={<NotFound />} />
             <Route path="metadata" element={<NotFound />} />
             <Route path="composiciones" element={<NotFound />} />
