@@ -7,7 +7,7 @@ function DynamicPanel({ children, leftActions, rightActions }) {
       <div
         className={
           barVisible &&
-          `flex h-[10%] w-full items-center justify-between rounded-t-xl bg-gray-200 p-4`
+          `flex h-[10%] w-full items-center justify-between rounded-t-xl bg-gray-200 p-4 xl:px-10`
         }
       >
         <div className={actionsStyles}>{leftActions}</div>

@@ -156,7 +156,7 @@ export default function CustomersForm({ edit = false }) {
     <DynamicPanel
       leftActions={
         <>
-          <h2 className="mb-8 w-full text-lg font-bold sm:mb-0 sm:w-auto">
+          <h2 className="text-lg font-bold">
             {edit ? "Editar" : "Nuevo"} cliente
           </h2>
         </>
