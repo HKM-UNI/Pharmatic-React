@@ -18,8 +18,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useContext } from "react";
+import { FormControlContext } from "./form";
 
-export function DatePicker({ control, fieldname, label = "Fecha" }) {
+export function DatePicker({ fieldname, label = "Fecha" }) {
+  const control = useContext(FormControlContext);
+
   return (
     <FormField
       control={control}
