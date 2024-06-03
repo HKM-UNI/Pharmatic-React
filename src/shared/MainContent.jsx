@@ -1,9 +1,10 @@
 function MainContent({ children }) {
   return (
-    <div className="w-full h-[90%] bg-pharmaticFade rounded-b-xl p-3">
-      <div className="bg-white rounded-2xl p-3 h-full overflow-auto">
-        {children}
-      </div>
+    <div className="h-[90%] w-full rounded-b-xl bg-pharmaticFade p-3">
+      {/* <div className="bg-white rounded-2xl p-3 h-full overflow-auto">
+        
+      </div> */}
+      {children}
     </div>
   );
 }

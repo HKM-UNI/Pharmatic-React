@@ -14,6 +14,7 @@ import {
   PhoneOff,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import DynamicPanel from "@/shared/DynamicPanel";
 
 export default function Customers() {
   const navigate = useNavigate();
@@ -87,17 +88,14 @@ export default function Customers() {
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex w-full items-center justify-end px-5">
-        {/* Espacio de busqueda */}
-        {/* <div></div> */}
-
-        {/* Acciones */}
-        <div>
+    <DynamicPanel
+      rightActions={
+        <>
           <Button onClick={() => navigate("/clientes/agregar")}>Agregar</Button>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
+        </>
+      }
+    >
+      <div className="pharmatic-card-grid">
         {customers.map((c) => (
           <PharmaticCard
             key={c.customerNo}
@@ -151,6 +149,6 @@ export default function Customers() {
           />
         ))}
       </div>
-    </div>
+    </DynamicPanel>
   );
 }
