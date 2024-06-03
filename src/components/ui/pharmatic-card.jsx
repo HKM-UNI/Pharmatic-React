@@ -2,7 +2,7 @@ import React from "react";
 
 function PharmaticCard({ imageSrc, title, info, actions }) {
   return (
-    <div className="flex flex-wrap rounded-lg shadow-md p-2 bg-gray-100">
+    <div className="flex flex-wrap rounded-lg bg-gray-100 p-6 shadow-md">
       <PharmaticCardImage src={imageSrc} />
       <PharmaticCardContent>
         <PharmaticCardTitle title={title} />
@@ -14,28 +14,27 @@ function PharmaticCard({ imageSrc, title, info, actions }) {
 }
 
 function PharmaticCardImage({ src }) {
-  const imageStyle = "w-16 h-16 rounded-full";
   return (
     <div className={src || "hidden"}>
-      <img src={src} alt="card image" className="w-full h-full object-cover" />
+      <img src={src} alt="card image" className="h-full w-full object-cover" />
     </div>
   );
 }
 
 function PharmaticCardContent({ children }) {
-  return <div className="flex flex-col p-2">{children}</div>;
+  return <div className="mb-3 flex flex-col">{children}</div>;
 }
 
 function PharmaticCardTitle({ title }) {
-  return <div className="text-xl xl:text-2xl font-semibold">{title}</div>;
+  return <div className="mb-3 text-xl font-bold xl:text-2xl">{title}</div>;
 }
 
 function PharmaticCardInfo({ info }) {
-  return <div className="text-md xl:text-lg">{info}</div>;
+  return <div className="text-md px-3 font-semibold xl:text-lg">{info}</div>;
 }
 
 function PharmaticCardActions({ actions }) {
-  return <div className="w-full grid grid-cols-2 gap-2">{actions}</div>;
+  return <div className="grid w-full grid-cols-2 gap-2">{actions}</div>;
 }
 
 export default PharmaticCard;
