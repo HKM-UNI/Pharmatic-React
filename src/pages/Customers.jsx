@@ -28,7 +28,7 @@ export default function Customers() {
       updateCustomerList();
     };
 
-    if (deleteCustomer) {
+    if (deletingCustomerId) {
       scheduleDeletion();
     }
   }, [deletingCustomerId]);
