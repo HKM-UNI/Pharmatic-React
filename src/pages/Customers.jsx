@@ -109,7 +109,7 @@ export default function Customers() {
                 <Button
                   className="rounded-3xl"
                   size="sm"
-                  variant="delete"
+                  variant="destructive"
                   onClick={() => setDeletingCustomerId(c.customerNo)}
                 >
                   {buttonDeleteContent(c.customerNo)}

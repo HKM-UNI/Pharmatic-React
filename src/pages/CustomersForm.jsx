@@ -113,7 +113,7 @@ export default function CustomersForm({ edit = false }) {
         </h2>
 
         <div className="flex items-center gap-3 text-end w-full sm:w-auto">
-          <Button variant="delete" onClick={handleCancelation}>
+          <Button variant="destructive" onClick={handleCancelation}>
             Cancelar
           </Button>
           <Button>{buttonSubmitContent()}</Button>
