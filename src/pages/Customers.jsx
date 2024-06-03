@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import PharmaticCard from "@/components/ui/pharmatic-card";
 import { useCustomers, useDeleteCustomer } from "@/hooks/customer_hooks";
-import { UserFemaleIcon, UserMaleIcon } from "@/icons";
+import { PersonGeneric, UserFemaleIcon, UserMaleIcon } from "@/icons";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -76,8 +76,10 @@ export default function Customers() {
                 <span className="w-12">
                   {c.gender == "M" ? (
                     <UserMaleIcon fill="#424242" />
-                  ) : (
+                  ) : c.gender == "F" ? (
                     <UserFemaleIcon fill="#424242" />
+                  ) : (
+                    <PersonGeneric fill="#424242" />
                   )}
                 </span>
                 {c.name} {c.surname}
