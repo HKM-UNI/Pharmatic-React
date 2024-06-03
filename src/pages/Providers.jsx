@@ -11,7 +11,7 @@ export default function Providers() {
     return <p>Loading providers..</p>;
   }
   return (
-    <div className="grid h-full grid-cols-1 gap-3 overflow-auto rounded-2xl bg-white p-3 sm:grid-cols-2 2xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
       {providers.map((p, i) => (
         <PharmaticCard
           key={i}
@@ -28,7 +28,7 @@ export default function Providers() {
               <Button className="rounded-3xl" size="sm">
                 Editar
               </Button>
-              <Button className="rounded-3xl" size="sm" variant="delete">
+              <Button className="rounded-3xl" size="sm" variant="destructive">
                 Eliminar
               </Button>
             </>
