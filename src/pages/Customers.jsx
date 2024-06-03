@@ -18,10 +18,40 @@ import { useEffect, useState } from "react";
 export default function Customers() {
   const navigate = useNavigate();
 
+  /* 
+    "customers" es una lista auto actualizable, usa datos en caché siempre que puede y
+    hace peticiones en segundo plano para revalidar los datos.
+
+    "isLoading" es una flag que es "true" cuando las requests asociadas están en progreso.
+
+    "error" es un error retornado por la función que realiza la solicitud (definida por axios en los hooks).
+
+    "updateCustomerList" es una función para invalidar la data actual y solicitar un refetch automáticamente.
+
+    Este hook está adaptado con "useSWR", retorna un arreglo porque es mas facil de tipar.
+    ver mas en https://swr.vercel.app/docs/data-fetching
+  */
   const [customers, isLoading, error, updateCustomerList] = useCustomers();
+
+  /* 
+    Este hook está adaptado con "useSWRMutation"
+    ver mas en https://swr.vercel.app/docs/mutation
+
+    "deleteCustomer" es una función asíncrona para eliminar un cliente dado su Id.
+
+    "isDeleting" será true cuando la request esté en progreso.
+   */
   const [deleteCustomer, isDeleting] = useDeleteCustomer();
+
+  /* 
+    Este es un estado para identificar el id del cliente a eliminar y así
+    mostrar un icono de progreso en el boton de la Card específica.
+
+    Mas adelante se establece mediante el "onClick" del boton Eliminar.
+   */
   const [deletingCustomerId, setDeletingCustomerId] = useState(null);
 
+  /* Cada vez que cambia el id del cliente a eliminar, ejecuta esta acción */
   useEffect(() => {
     const scheduleDeletion = async () => {
       await deleteCustomer(deletingCustomerId);
