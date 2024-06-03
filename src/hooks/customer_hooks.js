@@ -4,18 +4,28 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
 /**
+ * @param {number} id
+ * @returns {[Customer, Error]}
+ */
+export function useCustomerData(id) {
+  const { data, error } = useSWR(id ? `customers/${id}` : null);
+
+  return [data, error];
+}
+
+/**
  * Updates the customers list via API
  * @callback customerListUpdateTrigger
  * @param {Array<Customer>} data
  */
 
 /**
- * @returns {[Array<Customer>, customerListUpdateTrigger, any, boolean]}
+ * @returns {[Array<Customer>, boolean, Error | null | undefined, customerListUpdateTrigger]}
  */
 export function useCustomers() {
-  const { data, mutate, error, isLoading } = useSWR("customers");
+  const { data, isLoading, error, mutate } = useSWR("customers");
 
-  return [data, mutate, error, isLoading];
+  return [data, isLoading, error, mutate];
 }
 
 /**
@@ -27,24 +37,22 @@ export function useCustomers() {
  */
 
 /**
- * @returns {[customerCreateTrigger, Customer, any, boolean]}
+ * @returns {[customerCreateTrigger, boolean, Error | null | undefined]}
  */
 export function useCreateCustomer() {
   const createCustomer = async (url, { arg: data }) =>
     axios.post(url, data).then((resp) => resp.data);
 
-  const {
-    trigger,
-    data: newData,
-    error,
-    isMutating,
-  } = useSWRMutation("customers/create", createCustomer);
+  const { trigger, isMutating, error } = useSWRMutation(
+    "customers/create",
+    createCustomer
+  );
 
-  return [trigger, newData, error, isMutating];
+  return [trigger, isMutating, error];
 }
 
 /**
- * @returns {[customerCreateTrigger, Customer, any, boolean]}
+ * @returns {[customerCreateTrigger, boolean, Error | null | undefined]}
  */
 export function useUpdateCustomer() {
   const updateCustomer = async (url, { arg: data }) =>
@@ -52,14 +60,12 @@ export function useUpdateCustomer() {
       .patch(url.replace("update_id", data.customerNo), data)
       .then((resp) => resp.data);
 
-  const {
-    trigger,
-    data: newData,
-    error,
-    isMutating,
-  } = useSWRMutation(`customers/update_id`, updateCustomer);
+  const { trigger, isMutating, error } = useSWRMutation(
+    `customers/update_id`,
+    updateCustomer
+  );
 
-  return [trigger, newData, error, isMutating];
+  return [trigger, isMutating, error];
 }
 
 /**
@@ -71,16 +77,16 @@ export function useUpdateCustomer() {
  */
 
 /**
- * @returns {[customerDeleteTrigger, any, boolean]}
+ * @returns {[customerDeleteTrigger, boolean, Error | null | undefined]}
  */
 export function useDeleteCustomer() {
-  const updateCustomer = async (url, { arg: id }) =>
+  const deleteCustomer = async (url, { arg: id }) =>
     axios.delete(url.replace("delete_id", id));
 
-  const { trigger, error, isMutating } = useSWRMutation(
+  const { trigger, isMutating, error } = useSWRMutation(
     `customers/delete_id`,
-    updateCustomer
+    deleteCustomer
   );
 
-  return [trigger, error, isMutating];
+  return [trigger, isMutating, error];
 }
