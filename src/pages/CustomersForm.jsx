@@ -166,11 +166,14 @@ export default function CustomersForm({ edit = false }) {
           <Button variant="destructive" onClick={handleCancelation}>
             Cancelar
           </Button>
-          <Button>{buttonSubmitContent()}</Button>
+          <Button form="customer-form" type="submit">
+            {buttonSubmitContent()}
+          </Button>
         </>
       }
     >
       <Form
+        id="customer-form"
         form={form}
         onValidSubmit={handleSubmit}
         className="h-full px-10 py-5"
