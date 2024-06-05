@@ -1,3 +1,5 @@
+import { Toaster } from "@/components/ui/toaster";
+
 function MainContent({ children }) {
   return (
     <div className="h-[90%] w-full rounded-b-xl bg-pharmaticFade p-3">
@@ -5,6 +7,7 @@ function MainContent({ children }) {
         
       </div> */}
       {children}
+      <Toaster />
     </div>
   );
 }

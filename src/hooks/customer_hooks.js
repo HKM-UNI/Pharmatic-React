@@ -1,4 +1,3 @@
-import { Customer } from "@/data/customer";
 import axios from "axios";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
@@ -45,12 +44,19 @@ export function useCreateCustomer() {
 
   const { trigger, isMutating, error } = useSWRMutation(
     "customers/create",
-    createCustomer
+    createCustomer,
   );
 
   return [trigger, isMutating, error];
 }
 
+/**
+ * Updates a customer via API
+ * @async
+ * @callback customerUpdateTrigger
+ * @param {Customer} data
+ * @returns {Promise<any>}
+ */
 /**
  * @returns {[customerCreateTrigger, boolean, Error | null | undefined]}
  */
@@ -62,7 +68,7 @@ export function useUpdateCustomer() {
 
   const { trigger, isMutating, error } = useSWRMutation(
     `customers/update_id`,
-    updateCustomer
+    updateCustomer,
   );
 
   return [trigger, isMutating, error];
@@ -85,7 +91,7 @@ export function useDeleteCustomer() {
 
   const { trigger, isMutating, error } = useSWRMutation(
     `customers/delete_id`,
-    deleteCustomer
+    deleteCustomer,
   );
 
   return [trigger, isMutating, error];

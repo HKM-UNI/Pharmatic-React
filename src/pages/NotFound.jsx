@@ -1,7 +1,7 @@
 function NotFound() {
   return (
-    <div className=" bg-white flex items-center justify-center h-full w-full rounded-2xl">
-      <h1 className="text-4xl xl:text-8xl text-pharmaticPrimary font-bold">
+    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-white">
+      <h1 className="text-4xl font-bold text-pharmaticPrimary xl:text-8xl">
         Pharmatic.
         <br />
         Not Found 404.

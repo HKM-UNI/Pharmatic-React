@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import DynamicPanel from "@/shared/DynamicPanel";
+import Error from "./Error";
+import LoadingPanel from "./LoadingPanel";
 
 export default function Customers() {
   const navigate = useNavigate();
@@ -65,18 +67,14 @@ export default function Customers() {
   }, [deletingCustomerId]);
 
   if (error) {
-    return <p>Failed to fetch customers</p>;
+    return <Error message="Failed to fetch customers." />;
   }
 
   if (isLoading) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <Loader2 className="size-20 animate-spin" />
-      </div>
-    );
+    return <LoadingPanel />;
   }
 
-  function handleAdd(customerId) {
+  function handleEdit(customerId) {
     navigate("/clientes/editar/" + customerId);
   }
 
@@ -132,7 +130,7 @@ export default function Customers() {
                 <Button
                   className="rounded-3xl"
                   size="sm"
-                  onClick={() => handleAdd(c.customerNo)}
+                  onClick={() => handleEdit(c.customerNo)}
                 >
                   Editar
                 </Button>

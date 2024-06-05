@@ -1,25 +1,19 @@
-"use client";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 
-import {
-  DatePicker,
-  Form,
-  FormInput,
-  FormSelect,
-} from "@/components/custom_form";
+import { Form, FormInput } from "@/components/custom_form";
 import { Button } from "@/components/ui/button";
 import {
-  useCreateCustomer,
-  useCustomerData,
-  useUpdateCustomer,
-} from "@/hooks/customer_hooks";
+  useCreateProvider,
+  useProviderData,
+  useUpdateProvider,
+} from "@/hooks/provider_hooks";
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import DynamicPanel from "@/shared/DynamicPanel";
+import { useToast } from "@/components/ui/use-toast";
 
 /* 
   Este es un esquema para declarar los campos y tipos de datos que llevará el formulario,
@@ -31,7 +25,6 @@ import DynamicPanel from "@/shared/DynamicPanel";
 const formSchema = yup
   .object({
     name: yup.string().required("El nombre es requerido"),
-    surname: yup.string().required("El apellido es requerido"),
     phone: yup
       .number()
       .nullable()
@@ -39,8 +32,7 @@ const formSchema = yup
       .integer("No es un número de teléfono válido")
       .transform((value) => (isNaN(value) ? null : value)),
     email: yup.string().nullable().email("No es un correo eletrónico válido"),
-    gender: yup.string().nullable(),
-    birthDate: yup.date().nullable(),
+    address: yup.string(),
   })
   .required();
 
@@ -49,35 +41,40 @@ const formSchema = yup
   TODOS los campos declarados en el esquema deben ir aquí, de lo contrario generará errores
   en el controlador.
  */
-const customerDefaults = {
+const providerDefaults = {
+  address: "",
+  email: "",
   name: "",
-  surname: "",
   phone: null,
-  email: null,
-  gender: null,
-  birthDate: null,
 };
 
-export default function CustomersForm({ edit = false }) {
+export default function ProviderForm({ edit = false }) {
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   /* Parametro recuperado de la url del Router
     https://v5.reactrouter.com/web/example/url-params
    */
-  const { customerId } = useParams();
+  const { providerId } = useParams();
 
   /* Similar a los endpoints anteriormente vistos, pero no hay una flag "loading",
     ya que suele ser muy rápido.
    */
-  const [customerData, errorOnCustomerData] = useCustomerData(customerId);
+  const [providerData, errorOnProviderData] = useProviderData(providerId);
 
-  const [updateCustomer, isUpdating] = useUpdateCustomer();
-  const [createCustomer, isCreating] = useCreateCustomer();
+  const [updateProvider, isUpdating] = useUpdateProvider();
+  const [createProvider, isCreating] = useCreateProvider();
 
-  if (edit && errorOnCustomerData) {
-    console.log("There was an error retrieving the customer data");
-    return null;
-  }
+  useEffect(() => {
+    if (edit && errorOnProviderData) {
+      console.log("There was an error retrieving the provider data.");
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was an error retrieving the provider data",
+      });
+    }
+  }, [edit, errorOnProviderData]);
 
   /* Este es un hook propio de "react-hook-form".
     Es similar al ejemplo en la documentación, pero en lugar de usar "zod" se usa "yup"
@@ -90,8 +87,8 @@ export default function CustomersForm({ edit = false }) {
     /* "useMemo" puede usar datos en caché de "customerData" con cada refresh
      Puede no ser necesario dado que SWR también implementa una caché. */
     defaultValues: useMemo(
-      () => customerData || customerDefaults,
-      [customerData],
+      () => providerData || providerDefaults,
+      [providerData],
     ),
   });
 
@@ -99,19 +96,10 @@ export default function CustomersForm({ edit = false }) {
     y restablecerá el formulario con estos.
   */
   useEffect(() => {
-    if (edit && customerData) {
-      form.reset(customerData);
+    if (edit && providerData) {
+      form.reset(providerData);
     }
-  }, [customerData]);
-
-  /* "Yup" no deja definir el formato que tendrá la fecha al mandarse en json.
-    Este es un truco para reasignar la fecha en formato "YYYY-MM-DD", aunque como string.
-   */
-  function preProcess(data) {
-    if (data.birthDate) {
-      data.birthDate = data.birthDate.toISOString().split("T")[0];
-    }
-  }
+  }, [providerData]);
 
   /* Este "submit" se utiliza internamente en el controlador del formulario,
     Así que previene ya previene la recarga de la página por defecto.
@@ -119,15 +107,13 @@ export default function CustomersForm({ edit = false }) {
     Los datos son exactamente los mismos del esquema.
     */
   async function handleSubmit(data) {
-    preProcess(data);
-
     if (edit) {
-      await updateCustomer(data);
+      await updateProvider(data);
     } else {
-      await createCustomer(data);
+      await createProvider(data);
     }
 
-    navigate("/clientes");
+    navigate("/proveedores");
   }
 
   /* Esta es una función que solo se maneja aquí, pero por defecto cualquier "submit"
@@ -135,7 +121,7 @@ export default function CustomersForm({ edit = false }) {
    */
   function handleCancelation(event) {
     event.preventDefault();
-    navigate("/clientes");
+    navigate("/proveedores");
   }
 
   const buttonSubmitContent = () => {
@@ -157,7 +143,7 @@ export default function CustomersForm({ edit = false }) {
       leftActions={
         <>
           <h2 className="text-lg font-bold">
-            {edit ? "Editar" : "Nuevo"} cliente
+            {edit ? "Editar" : "Nuevo"} proveedor
           </h2>
         </>
       }
@@ -166,14 +152,14 @@ export default function CustomersForm({ edit = false }) {
           <Button variant="destructive" onClick={handleCancelation}>
             Cancelar
           </Button>
-          <Button form="customer-form" type="submit">
+          <Button form="provider-form" type="submit">
             {buttonSubmitContent()}
           </Button>
         </>
       }
     >
       <Form
-        id="customer-form"
+        id="provider-form"
         form={form}
         onValidSubmit={handleSubmit}
         className="h-full px-10 py-5"
@@ -189,7 +175,6 @@ export default function CustomersForm({ edit = false }) {
             Para mas detalles, ver los componentes en el archivo /src/components/custom_form/form
           */}
             <FormInput fieldname="name" label="Nombre" placeholder="Juan" />
-            <FormInput fieldname="surname" label="Apellido" placeholder="Doe" />
             <FormInput
               type="email"
               fieldname="email"
@@ -202,15 +187,11 @@ export default function CustomersForm({ edit = false }) {
               label="Número de teléfono"
               placeholder="89764532"
             />
-            <FormSelect
-              fieldname="gender"
-              label="Sexo"
-              options={[
-                { label: "Masculino", value: "M" },
-                { label: "Femenino", value: "F" },
-              ]}
+            <FormInput
+              fieldname="address"
+              label="Dirección"
+              placeholder="Domicilio"
             />
-            <DatePicker fieldname="birthDate" label="Fecha" />
           </div>
         </div>
       </Form>

@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import PharmaticCard from "@/components/ui/pharmatic-card";
-import { useProviders } from "@/hooks/provider_hooks";
+import { useDeleteProvider, useProviders } from "@/hooks/provider_hooks";
 import DynamicPanel from "@/shared/DynamicPanel";
 import {
+  Loader2,
   Mail,
   MailX,
   MapPinIcon,
@@ -10,17 +11,56 @@ import {
   Phone,
   PhoneOff,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import LoadingPanel from "./LoadingPanel";
+import Error from "./Error";
+import { useEffect, useState } from "react";
 
 export default function Providers() {
-  const [providers, error, isLoading] = useProviders();
+  const navigate = useNavigate();
+  const [providers, error, isLoading, updateProviderList] = useProviders();
+  const [deleteProvider, isDeleting] = useDeleteProvider();
+  const [deletingProviderId, setDeletingProviderId] = useState(null);
+
+  useEffect(() => {
+    const scheduleDeletion = async () => {
+      await deleteProvider(deletingProviderId);
+      updateProviderList();
+    };
+
+    if (deletingProviderId) {
+      scheduleDeletion();
+    }
+  }, [deletingProviderId]);
+
   if (error) {
-    return <p>Failed to fetch providers</p>;
+    return <Error message="Failed to fetch providers" />;
   }
   if (isLoading) {
-    return <p>Loading providers..</p>;
+    return <LoadingPanel />;
   }
+
+  function handleEdit(providerId) {
+    navigate("/proveedores/editar/" + providerId);
+  }
+
+  const buttonDeleteContent = (providerId) => {
+    if (isDeleting && providerId == deletingProviderId) {
+      return <Loader2 className="animate-spin"></Loader2>;
+    }
+    return "Eliminar";
+  };
+
   return (
-    <DynamicPanel>
+    <DynamicPanel
+      rightActions={
+        <>
+          <Button onClick={() => navigate("/proveedores/agregar")}>
+            Agregar
+          </Button>
+        </>
+      }
+    >
       <div className="pharmatic-card-grid">
         {providers.map((p, i) => (
           <PharmaticCard
@@ -41,11 +81,20 @@ export default function Providers() {
             }
             actions={
               <>
-                <Button className="rounded-3xl" size="sm">
+                <Button
+                  className="rounded-3xl"
+                  size="sm"
+                  onClick={() => handleEdit(p.providerNo)}
+                >
                   Editar
                 </Button>
-                <Button className="rounded-3xl" size="sm" variant="destructive">
-                  Eliminar
+                <Button
+                  className="rounded-3xl"
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => setDeletingProviderId(p.providerNo)}
+                >
+                  {buttonDeleteContent(p.providerNo)}
                 </Button>
               </>
             }
