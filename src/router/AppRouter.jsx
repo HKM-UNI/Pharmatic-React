@@ -2,6 +2,7 @@ import Customers from "@/pages/Customers";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
 import Providers from "@/pages/Providers";
+import SalesHistory from "@/pages/SalesHistory";
 import CustomerForm from "@/pages/forms/CustomerForm";
 import ProviderForm from "@/pages/forms/ProviderForm";
 import MainLayout from "@/shared/MainLayout";
@@ -40,12 +41,20 @@ export function AppRouter() {
 const MainContentRoutes = () => (
   <>
     <Route index path="dashboard" element={<NotFound />} />
+    {SalesRoutes()}
     {CustomerRoutes()}
     {ProviderRoutes()}
     {ProductRoutes()}
     <Route path="metadata" element={<NotFound />} />
     <Route path="composiciones" element={<NotFound />} />
     <Route path="*" element={<NotFound />} />
+  </>
+);
+
+const SalesRoutes = () => (
+  <>
+    <Route path="ventas/carrito" element={<NotFound />} />
+    <Route path="ventas/reciente" element={<SalesHistory />} />
   </>
 );
 

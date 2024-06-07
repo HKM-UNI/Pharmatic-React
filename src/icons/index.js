@@ -17,11 +17,12 @@ export { ReactComponent as NotepadIcon } from "./notepad.svg";
 export { ReactComponent as NotificationIcon } from "./notification.svg";
 export { ReactComponent as PaymentIcon } from "./payment.svg";
 export { ReactComponent as PersonGeneric } from "./person_generic.svg";
+export { ReactComponent as PresentionChartIcon } from "./presentionchart.svg";
 export { ReactComponent as ProvidersIcon } from "./providers.svg";
 export { ReactComponent as SearchIcon } from "./search.svg";
 export { ReactComponent as Setting3Icon } from "./setting3.svg";
+export { ReactComponent as ShoppingCartIcon } from "./shopping_cart.svg";
 export { ReactComponent as Tag2Icon } from "./tag2.svg";
 export { ReactComponent as UserIcon } from "./user.svg";
 export { ReactComponent as UserFemaleIcon } from "./user_female.svg";
 export { ReactComponent as UserMaleIcon } from "./user_male.svg";
-

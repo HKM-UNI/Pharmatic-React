@@ -1,13 +1,18 @@
+import {
+  ClientIcon,
+  PresentionChartIcon,
+  ProvidersIcon,
+  ShoppingCartIcon,
+} from "@/icons";
 import { NavLink } from "react-router-dom";
 import {
-  DashBoardIcon,
-  UserIcon,
-  DropBoxIcon,
   BagIcon,
-  Setting3Icon,
   ChemicalGlassIcon,
+  DashBoardIcon,
+  DropBoxIcon,
+  Setting3Icon,
+  UserIcon,
 } from "/src/icons";
-import { ClientIcon, ProvidersIcon } from "@/icons";
 
 const pharmaticLink =
   "flex items-center pl-5 py-2 transition-all duration-300 w-[90%] text-md";
@@ -41,6 +46,27 @@ function NavigationLinks() {
       >
         <DashBoardIcon className="mr-3 h-6 w-6" />
         Dashboard
+      </NavLink>
+
+      <div className={groupLinkTextStyle}>
+        <DropBoxIcon className="mr-3 h-6 w-6" />
+        Ventas
+      </div>
+
+      <NavLink
+        to="/ventas/carrito"
+        className={({ isActive }) => getLinkStyle(isActive, true)}
+      >
+        <ShoppingCartIcon className="mr-3 h-6 w-6" />
+        Nueva venta
+      </NavLink>
+
+      <NavLink
+        to="/ventas/reciente"
+        className={({ isActive }) => getLinkStyle(isActive, true)}
+      >
+        <PresentionChartIcon className="mr-3 h-6 w-6" />
+        Últimas ventas
       </NavLink>
 
       <div className={groupLinkTextStyle}>
