@@ -8,6 +8,7 @@ import MainLayout from "@/shared/MainLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
+import Products from "@/pages/Products";
 
 export function AppRouter() {
   return (
@@ -23,7 +24,7 @@ export function AppRouter() {
           }
         />
         <Route
-          path="/*"
+          path="/"
           element={
             <PrivateRoute>
               <MainLayout />
@@ -71,6 +72,4 @@ const ProviderRoutes = () => (
   </>
 );
 
-const ProductRoutes = () => {
-  <Route path="productos" element={<NotFound />} />;
-};
+const ProductRoutes = () => <Route path="productos" element={<Products />} />;

@@ -31,10 +31,6 @@ const getLinkStyle = (isActive, isSubLink = false) =>
 function NavigationLinks() {
   return (
     <nav className="flex flex-col space-y-2">
-      <NavLink to="/login" className={({ isActive }) => getLinkStyle(isActive)}>
-        <UserIcon className="mr-3 h-6 w-6" />
-        Login
-      </NavLink>
       <NavLink
         to="/dashboard"
         className={({ isActive }) => getLinkStyle(isActive)}
