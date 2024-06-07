@@ -36,11 +36,11 @@ export default function SalesHistory() {
           <SalesCard key={s.invoiceNo}>
             <div className="space-y-5">
               <div className="flex items-center justify-between text-lg font-semibold">
-                <div className="inline-flex items-center gap-2 text-green-600">
+                <div className="inline-flex items-center gap-2 text-teal-600">
                   <Banknote />
                   {s.salesAmount}
                 </div>
-                <div className="inline-flex items-center gap-2">
+                <div className="inline-flex items-center gap-1">
                   {s.totalProducts}
                   <ShoppingCart />
                 </div>
