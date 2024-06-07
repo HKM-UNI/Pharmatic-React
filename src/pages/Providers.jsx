@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 
 export default function Providers() {
   const navigate = useNavigate();
-  const [providers, error, isLoading, updateProviderList] = useProviders();
+  const [providers, isLoading, error, updateProviderList] = useProviders();
   const [deleteProvider, isDeleting] = useDeleteProvider();
   const [deletingProviderId, setDeletingProviderId] = useState(null);
 
