@@ -26,11 +26,11 @@ function PharmaticCardContent({ children }) {
 }
 
 function PharmaticCardTitle({ title }) {
-  return <div className="mb-3 text-xl font-bold xl:text-2xl">{title}</div>;
+  return <div className="mb-3 text-lg font-bold xl:text-2xl">{title}</div>;
 }
 
 function PharmaticCardInfo({ info }) {
-  return <div className="text-md px-3 font-semibold xl:text-lg">{info}</div>;
+  return <div className="xl:text-md px-3 text-sm font-semibold">{info}</div>;
 }
 
 function PharmaticCardActions({ actions }) {

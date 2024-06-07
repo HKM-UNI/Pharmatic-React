@@ -8,25 +8,24 @@ import { Outlet } from "react-router-dom";
 
 function MainLayout() {
   return (
-    <div className="flex h-dvh p-2 xl:p-4">
-      <div className="h-full w-[16%] bg-white mr-6 rounded-xl hidden xl:flex flex-col">
+    <div className="flex h-dvh p-2 lg:p-3">
+      <div className="mr-6 hidden h-full w-[16%] flex-col overflow-auto rounded-xl bg-white xl:flex">
         <NavigationMenu />
       </div>
 
-      <div className="w-full xl:w-[84%] h-full">
-        <Sheet>
-          <AppBar>
+      <div className="flex h-full w-full flex-col xl:w-[84%]">
+        <AppBar>
+          <Sheet>
             <SheetTrigger className="block xl:hidden">
               <Button variant="ghost" size="icon" className="rounded-full">
-                <MenuIcon className="w-6 h-6 " />
+                <MenuIcon className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-          </AppBar>
-
-          <SheetContent side="left" className="flex flex-col overflow-y-auto">
-            <NavigationMenu />
-          </SheetContent>
-        </Sheet>
+            <SheetContent side="left" className="flex flex-col overflow-y-auto">
+              <NavigationMenu />
+            </SheetContent>
+          </Sheet>
+        </AppBar>
 
         <MainContent>
           <Outlet />

@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 function AppBar({ children }) {
   return (
-    <div className="flex h-[10%] w-full items-center justify-between rounded-t-xl bg-white px-4 py-4 xl:px-10">
+    <div className="flex h-20 w-full items-center justify-between rounded-t-xl bg-white p-4 xl:px-10">
       <div className="flex items-center gap-x-3">
         {children}
         <Breadcrumb>
