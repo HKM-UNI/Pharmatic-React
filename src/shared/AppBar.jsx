@@ -1,3 +1,4 @@
+import { AuthContext } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Breadcrumb,
@@ -16,10 +17,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AppBar({ children }) {
   return (
-    <div className="w-full h-[10%] bg-white rounded-t-xl py-4 px-4 xl:px-10 flex items-center justify-between">
+    <div className="flex h-[10%] w-full items-center justify-between rounded-t-xl bg-white px-4 py-4 xl:px-10">
       <div className="flex items-center gap-x-3">
         {children}
         <Breadcrumb>
@@ -45,17 +48,25 @@ function AppBar({ children }) {
 }
 
 function UserCard() {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="xl:hover:bg-gray-100 rounded-xl px-3 py-1">
-          <div className="flex h-full items-center gap-x-3.5 spacing">
+        <div className="rounded-xl px-3 py-1 xl:hover:bg-gray-100">
+          <div className="spacing flex h-full items-center gap-x-3.5">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col hidden xl:block cursor-default">
-              <p className="font-bold">José Ramírez</p>
+            <div className="flex hidden cursor-default flex-col xl:block">
+              <p className="font-bold">{user?.username}</p>
               <p className="">correo@etc.com</p>
             </div>
           </div>
@@ -68,6 +79,9 @@ function UserCard() {
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
+          Cerrar Sesión
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
