@@ -13,14 +13,14 @@ export function useProductData(productNo) {
 /**
  * Updates the product list via API
  * @callback productListUpdateTrigger
- * @param {Array<Product>} data
+ * @param {Array<ProductOverview>} data
  */
 
 /**
- * @returns {[Array<Product>, boolean, Error | null | undefined, productListUpdateTrigger]}
+ * @returns {[Array<ProductOverview>, boolean, Error | null | undefined, productListUpdateTrigger]}
  */
 export function useProducts() {
-  const { data, isLoading, error, mutate } = useSWR("products");
+  const { data, isLoading, error, mutate } = useSWR("products/overview");
 
   return [data, isLoading, error, mutate];
 }

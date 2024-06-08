@@ -28,23 +28,22 @@ function Products() {
         </>
       }
     >
-      <div className="grid h-full grid-cols-1 gap-5 p-3 md:grid-cols-2 2xl:grid-cols-3">
+      <div className="grid h-full grid-cols-1 gap-5 p-4 md:grid-cols-2 2xl:grid-cols-3">
         {products.map((p) => (
           <ProductCard
             imageUrl={p.imageUrl}
             key={p.productNo}
             title={
               <>
-                <p>{p.name}</p>
-                <p className="font-semibold">{p.category.name}</p>
+                <p>{p.productName}</p>
+                <p className="font-semibold">{p.categoryName}</p>
               </>
             }
             info={
               <>
-                <p>{p.subcategory.name}</p>
                 <div className="my-2 flex gap-2">
-                  {p.tags.map((t) => (
-                    <Badge key={t.tagNo}>{t.name}</Badge>
+                  {p.productTags.map((t, i) => (
+                    <Badge key={i}>{t}</Badge>
                   ))}
                 </div>
               </>
