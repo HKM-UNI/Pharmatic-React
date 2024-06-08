@@ -84,13 +84,6 @@ function NavigationLinks() {
         <Setting3Icon className="mr-3 h-6 w-6" />
         Metadata
       </NavLink>
-      <NavLink
-        to="/composiciones"
-        className={({ isActive }) => getLinkStyle(isActive, true)}
-      >
-        <ChemicalGlassIcon className="mr-3 h-6 w-6" />
-        Composiciones
-      </NavLink>
 
       <NavLink
         to="/clientes"

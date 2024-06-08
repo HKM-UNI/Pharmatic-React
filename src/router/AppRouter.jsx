@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Products from "@/pages/Products";
+import Metadata from "@/pages/Metadata";
 
 export function AppRouter() {
   return (
@@ -46,8 +47,7 @@ const MainContentRoutes = () => (
     {CustomerRoutes()}
     {ProviderRoutes()}
     {ProductRoutes()}
-    <Route path="metadata" element={<NotFound />} />
-    <Route path="composiciones" element={<NotFound />} />
+    {MetaDataRoutes()}
     <Route path="*" element={<NotFound />} />
   </>
 );
@@ -78,6 +78,17 @@ const ProviderRoutes = () => (
       path="proveedores/editar/:providerId"
       element={<ProviderForm edit={true} />}
     />
+  </>
+);
+
+const MetaDataRoutes = () => (
+  <>
+    <Route path="metadata" element={<Metadata />} />
+    <Route path="metadata/categorias" element={<NotFound />} />
+    <Route path="metadata/unidades" element={<NotFound />} />
+    <Route path="metadata/tags" element={<NotFound />} />
+    <Route path="metadata/vias" element={<NotFound />} />
+    <Route path="metadata/tipo" element={<NotFound />} />
   </>
 );
 
