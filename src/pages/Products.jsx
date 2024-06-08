@@ -28,7 +28,7 @@ function Products() {
         </>
       }
     >
-      <div className="grid h-full grid-cols-1 gap-5 p-4 md:grid-cols-2 2xl:grid-cols-3">
+      <div className="grid h-full grid-cols-1 gap-6 p-6 md:grid-cols-2 2xl:grid-cols-3">
         {products.map((p) => (
           <ProductCard
             imageUrl={p.imageUrl}
@@ -57,12 +57,12 @@ function Products() {
 
 function ProductCard({ imageUrl, title, info }) {
   return (
-    <div className="grid grid-cols-6 gap-3 rounded-lg bg-gray-100 p-6 shadow-lg">
+    <div className="grid cursor-pointer grid-cols-6 gap-3 rounded-lg bg-gray-100 p-6 drop-shadow-lg transition delay-150 ease-in-out hover:-translate-y-1 hover:scale-105">
       <div className="col-start-1 col-end-3">
         <img
           src={imageUrl}
           alt="card image"
-          className="h-full w-full object-cover"
+          className="h-full w-full rounded-lg border-2 object-contain"
         />
       </div>
       <div className="col-start-3 col-end-7">
