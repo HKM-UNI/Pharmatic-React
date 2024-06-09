@@ -62,10 +62,8 @@ function UserCard() {
         <div className="rounded-xl px-3 py-1 xl:hover:bg-gray-100">
           <div className="spacing flex h-full items-center gap-x-3.5">
             <Avatar>
-              <AvatarImage src={user?.imageUrl} />
-              <AvatarFallback>
-                <AvatarImage src="/assets/user_profile.svg" />
-              </AvatarFallback>
+              <AvatarImage src={user?.imageUrl || "/user_profile.svg"} />
+              <AvatarFallback>Perfil</AvatarFallback>
             </Avatar>
             <div className="flex hidden cursor-default flex-col xl:block">
               <p className="font-bold">{user?.username}</p>

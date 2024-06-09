@@ -43,7 +43,7 @@ function PharmaticLogo() {
   return (
     <div className="px-5 py-2">
       <img
-        src="../../assets/PharmaticLogo.png"
+        src="/PharmaticLogo.png"
         alt="logo pharmatic"
         className="w-full h-auto"
       ></img>

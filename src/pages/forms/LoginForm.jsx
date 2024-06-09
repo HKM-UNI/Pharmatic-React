@@ -71,7 +71,7 @@ export function LoginForm() {
 function PharmaticLogo() {
   return (
     <img
-      src="../../assets/PharmaticLogo.png"
+      src="/PharmaticLogo.png"
       alt="logo pharmatic"
       className="my-3 h-auto w-64"
     ></img>
