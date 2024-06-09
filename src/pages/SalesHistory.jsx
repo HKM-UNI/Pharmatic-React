@@ -46,8 +46,8 @@ export default function SalesHistory() {
                 </div>
               </div>
               <div className="h-[15em] overflow-auto whitespace-nowrap rounded bg-white p-4">
-                {s.products.map((p) => (
-                  <p className="mb-3 font-normal">{p}</p>
+                {s.products.map((p, idx) => (
+                  <p key={idx} className="mb-3 font-normal">{p}</p>
                 ))}
               </div>
               <div className="inline-flex items-center gap-2">
