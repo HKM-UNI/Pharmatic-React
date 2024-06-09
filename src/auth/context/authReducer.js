@@ -3,6 +3,8 @@ import { authType } from "../types/types";
 /**
  * @typedef {Object} authUser
  * @property {string} username
+ * @property {string=} email
+ * @property {string=} imageUrl
  * @property {string[]} scopes
  */
 

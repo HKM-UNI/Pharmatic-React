@@ -13,7 +13,9 @@ import { authReducer } from "./authReducer";
  */
 
 /**
- * @typedef {{exp: number, username: string, scopes: string[]}} jwtModel
+ * @typedef {
+ *  {exp: number, username: string, email: string, imageUrl: string, scopes: string[]}
+ * } jwtModel
  */
 
 /**
@@ -83,6 +85,8 @@ export function AuthProvider({ children }) {
      */
     const loggedUser = {
       username: jwt.username,
+      email: jwt.email,
+      imageUrl: jwt.imageUrl,
       scopes: jwt.scopes,
     };
     localStorage.setItem("user", JSON.stringify(loggedUser));
