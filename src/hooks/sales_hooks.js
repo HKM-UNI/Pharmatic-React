@@ -8,6 +8,7 @@ import useSWR from "swr";
  * @property {string} salesAmount
  * @property {Date} salesDate
  * @property {number} totalProducts
+ * @property {boolean} active
  */
 
 /**

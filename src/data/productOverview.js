@@ -5,4 +5,5 @@ export class ProductOverview {
   productName = "";
   productNo = 0;
   tags = [""];
+  stock = 0;
 }
