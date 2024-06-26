@@ -113,3 +113,75 @@ export function FormSelect({
     />
   );
 }
+
+export function FormComboBox({
+  fieldname,
+  label = "Select",
+  open,
+  setOpen,
+  value,
+  setValue,
+  options,
+  selectPlaceHolder,
+  searchPlaceHolder,
+  notFoundMessage,
+  ...props
+}) {
+  const control = useContext(FormControlContext);
+
+  return (
+    <FormField
+      control={control}
+      name={fieldname}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between"
+              >
+                {value
+                  ? options.find((opt) => opt.value === value)?.label
+                  : selectPlaceHolder}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput placeholder={searchPlaceHolder} />
+                <CommandList>
+                  <CommandEmpty>{notFoundMessage}</CommandEmpty>
+                  <CommandGroup>
+                    {options.map((opt, idx) => (
+                      <CommandItem
+                        key={idx}
+                        value={opt.value}
+                        onSelect={(currentValue) => {
+                          setValue(currentValue === value ? "" : currentValue);
+                          setOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === opt.value ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                        {opt.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}

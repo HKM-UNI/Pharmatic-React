@@ -11,6 +11,7 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Products from "@/pages/Products";
 import Metadata from "@/pages/Metadata";
+import ProductForm from "@/pages/forms/ProductForm";
 
 export function AppRouter() {
   return (
@@ -92,4 +93,4 @@ const MetaDataRoutes = () => (
   </>
 );
 
-const ProductRoutes = () => <Route path="productos" element={<Products />} />;
+const ProductRoutes = () => (<><Route path="productos" element={<Products />} /> <Route path="productos/agregar" element={<ProductForm/>} /></>);
