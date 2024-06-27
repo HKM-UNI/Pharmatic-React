@@ -1,21 +1,9 @@
+import { Form, FormComboBox } from "@/components/custom_form/form";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { useCatalogs } from "@/hooks/catalog_hooks";
 import DynamicPanel from "@/shared/DynamicPanel";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ChevronsUpDown } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -35,7 +23,7 @@ const formSchema = yup
   .required();
 
 const productDefaults = {
-  catalogNo: null,
+  catalogNo: 1,
   categoryNo: null,
   subcategoryNo: null,
   providerNo: null,
@@ -57,5 +45,52 @@ export default function ProductForm() {
     console.log(values);
   }
 
-  return <></>;
+  const [catalogs, isLoading, error, updateCatalogList] = useCatalogs();
+  const [cbCatalogValue, cbCatalogSetValue] = useState(1);
+  const [cbCatalogOpen, cbCatalogSetOpen] = React.useState(false);
+
+  let catalogOptions = [];
+  if (catalogs) {
+    catalogOptions = catalogs.map((item) => ({
+      value: item.catalogNo,
+      label: item.name,
+    }));
+  }
+  return (
+    <DynamicPanel
+      leftActions={
+        <>
+          <h2 className="text-lg font-bold">Nuevo Producto</h2>
+        </>
+      }
+      rightActions={
+        <>
+          <Button variant="destructive">Cancelar</Button>
+          <Button form="provider-form" type="submit">
+            Agregar
+          </Button>
+        </>
+      }
+    >
+      <Form
+        id="provider-form"
+        form={form}
+        onValidSubmit={onSubmit}
+        className="h-full px-10 py-5"
+      >
+        <div className="flex justify-center pb-10 pt-5 md:pt-16">
+          <div className="grid w-80 grid-cols-1 gap-3 md:w-2/3 md:grid-cols-2 md:gap-4">
+            <FormComboBox
+              options={catalogOptions}
+              open={cbCatalogOpen}
+              setOpen={cbCatalogSetOpen}
+              value={cbCatalogValue}
+              setValue={cbCatalogSetValue}
+              fieldname="name"
+            />
+          </div>
+        </div>
+      </Form>
+    </DynamicPanel>
+  );
 }

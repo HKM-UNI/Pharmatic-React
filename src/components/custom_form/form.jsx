@@ -16,6 +16,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import { cn } from "@/lib/utils";
 
 export const FormControlContext = createContext(null);
 
@@ -116,15 +128,15 @@ export function FormSelect({
 
 export function FormComboBox({
   fieldname,
-  label = "Select",
-  open,
-  setOpen,
-  value,
-  setValue,
-  options,
-  selectPlaceHolder,
-  searchPlaceHolder,
-  notFoundMessage,
+  label = "ComboBox",
+  open = false,
+  setOpen = () => null,
+  value = null,
+  setValue = () => null,
+  options = [],
+  selectPlaceHolder = "Select value",
+  searchPlaceHolder = "Search value",
+  notFoundMessage = "Value not found",
   ...props
 }) {
   const control = useContext(FormControlContext);
