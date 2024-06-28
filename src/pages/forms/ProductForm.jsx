@@ -1,28 +1,35 @@
-import { Form, FormComboBox, FormInput } from "@/components/custom_form/form";
+import { DatePicker } from "@/components/custom_form";
+import {
+  Form,
+  FormComboBox,
+  FormInput,
+  FormSelect,
+} from "@/components/custom_form/form";
 import { Button } from "@/components/ui/button";
+import { useAdminRoutes } from "@/hooks/adminRoute_hooks";
 import { useCatalogs } from "@/hooks/catalog_hooks";
 import { useCategories } from "@/hooks/category_hooks";
+import { useDosageForms } from "@/hooks/dosageForm_hooks";
 import { useProviders } from "@/hooks/provider_hooks";
 import { useSubcategories } from "@/hooks/subcategory_hooks";
+import { useTags } from "@/hooks/tag_hooks";
 import DynamicPanel from "@/shared/DynamicPanel";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import LoadingPanel from "../LoadingPanel";
-import { DatePicker } from "@/components/custom_form";
-import { CirclePlus } from "lucide-react";
-import { useAdminRoutes } from "@/hooks/adminRoute_hooks";
-import { useDosageForms } from "@/hooks/dosageForm_hooks";
-import { useTags } from "@/hooks/tag_hooks";
+import { useNavigate } from "react-router-dom";
 
 const today = new Date();
 const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
+const allowedUnits = ["g", "mg", "ml", "cc"];
 
 const tagSchema = yup.object().shape({
   value: yup.number(),
   label: yup.string(),
 });
+
+const requiredMessage = "Este campo es requerido";
 
 const formSchema = yup
   .object({
@@ -34,22 +41,31 @@ const formSchema = yup
       .number()
       .integer()
       .moreThan(0, "Cantidad debe ser mayor a 0")
-      .nullable(),
+      .nonNullable(requiredMessage)
+      .required(requiredMessage),
+    unit: yup.string().oneOf(allowedUnits).required(),
     discount: yup
       .number()
       .positive("No se admiten signos")
       .max(100, "No puede ser mas del 100%")
       .nullable(),
     consign: yup.bool(),
-    purchasePriceUnit: yup.number().positive("No se admiten signos"),
-    sellingPriceUnit: yup.number().positive("No se admiten signos"),
+    purchasePriceUnit: yup
+      .number()
+      .positive("No se admiten signos")
+      .nonNullable(requiredMessage),
+    sellingPriceUnit: yup
+      .number()
+      .positive("No se admiten signos")
+      .nonNullable(requiredMessage),
     expirationDate: yup
       .date()
       .min(
         nextMonth,
         "La fecha de expiración debe ser 1 mes posterior a la fecha actual como mínimo",
       )
-      .required(),
+      .nonNullable(requiredMessage)
+      .required(requiredMessage),
     adminRouteNo: yup.number().nullable(),
     dosageFormNo: yup.number().nullable(),
     tags: yup.array().of(tagSchema).nullable(),
@@ -62,16 +78,20 @@ const productDefaults = {
   subcategoryNo: null,
   providerNo: null,
   contentSize: null,
-  discount: null,
+  unit: "g",
   consign: false,
-  purchasePrice: null,
-  sellingPrice: null,
+  discount: null,
+  purchasePriceUnit: null,
+  sellingPriceUnit: null,
+  expirationDate: null,
   adminRouteNo: null,
   dosageFormNo: null,
-  tags: null,
+  tags: [],
 };
 
 export default function ProductForm() {
+  const navigate = useNavigate();
+
   const form = useForm({
     resolver: yupResolver(formSchema),
     defaultValues: productDefaults,
@@ -115,8 +135,20 @@ export default function ProductForm() {
     return <LoadingPanel />;
   }
 
+  function preProcess(values) {
+    values.contentSize += values.unit;
+    if (values.expirationDate) {
+      values.expirationDate = values.expirationDate.toISOString().split("T")[0];
+    }
+  }
+
   function onSubmit(values) {
-    console.log(`Formulario: ${values}`);
+    preProcess(values);
+    console.log(`Formulario: ${JSON.stringify(values)}`);
+  }
+
+  function handleCancellation() {
+    navigate("/productos");
   }
 
   return (
@@ -128,7 +160,9 @@ export default function ProductForm() {
       }
       rightActions={
         <>
-          <Button variant="destructive">Cancelar</Button>
+          <Button variant="destructive" onClick={handleCancellation}>
+            Cancelar
+          </Button>
           <Button form="product-form" type="submit">
             Agregar
           </Button>
@@ -209,15 +243,29 @@ export default function ProductForm() {
               label="Vía de administración"
             />
 
-            <FormInput
-              fieldname="contentSize"
-              label="Cantidad"
-              placeholder="0mg"
-            />
+            <div className="flex flex-row items-end gap-2">
+              <FormInput
+                className="text-right"
+                fieldname="contentSize"
+                label="Cantidad"
+                type="number"
+                placeholder="0"
+              />
+              <FormSelect
+                fieldname="unit"
+                label={null}
+                placeholder="g"
+                options={allowedUnits.map((u) => ({ value: u, label: u }))}
+              />
+            </div>
 
             <DatePicker
               fieldname="expirationDate"
               label="Fecha de expiración"
+              fromYear={nextMonth.getFullYear()}
+              toYear={2099}
+              defaultMonth={nextMonth}
+              minDate={nextMonth}
             />
 
             <FormInput

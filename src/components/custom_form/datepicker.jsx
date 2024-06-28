@@ -21,7 +21,14 @@ import { cn } from "@/lib/utils";
 import { useContext } from "react";
 import { FormContext } from "./form";
 
-export function DatePicker({ fieldname, label = "Fecha" }) {
+export function DatePicker({
+  fieldname,
+  label = "Fecha",
+  fromYear = 1950,
+  toYear = 2024,
+  defaultMonth = null,
+  minDate = new Date("1950-01-01"),
+}) {
   const form = useContext(FormContext);
 
   return (
@@ -50,9 +57,12 @@ export function DatePicker({ fieldname, label = "Fecha" }) {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
+                fromYear={fromYear}
+                toYear={toYear}
+                defaultMonth={defaultMonth}
                 selected={field.value}
                 onSelect={field.onChange}
-                disabled={(date) => date < new Date("1900-01-01")}
+                disabled={(date) => date < minDate}
                 initialFocus
               />
             </PopoverContent>
