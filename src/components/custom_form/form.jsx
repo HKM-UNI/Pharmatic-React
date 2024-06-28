@@ -131,28 +131,44 @@ export function FormComboBox({
   selectPlaceHolder = "Select value",
   searchPlaceHolder = "Search value",
   notFoundMessage = "Value not found",
+  multipleValues = false,
   ...props
 }) {
   const form = useContext(FormContext);
   const [open, setOpen] = useState(false);
 
+  const selectedValue = (value) =>
+    options.find((opt) => opt.value === value)?.label;
+  const selectedValues = () => null;
+
+  const setValue = (value) => {
+    form.setValue(fieldname, value);
+    setOpen(false);
+  };
+  const setValues = (values, selectedValue) => {
+    if (values !== null) {
+      form.setValue(fieldname, [...values, selectedValue]);
+    } else form.setValue(fieldname, [selectedValue]);
+  };
   return (
     <FormField
       control={form.control}
       name={fieldname}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex flex-col">
           <FormLabel>{label}</FormLabel>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 role="combobox"
-                className="justify-between"
+                className="justify-between font-normal"
                 aria-expanded={open}
               >
                 {field.value
-                  ? options.find((opt) => opt.value === field.value)?.label
+                  ? multipleValues
+                    ? selectedValues
+                    : selectedValue(field.value)
                   : selectPlaceHolder}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
@@ -168,16 +184,19 @@ export function FormComboBox({
                         key={idx}
                         value={opt.value}
                         onSelect={() => {
-                          form.setValue("catalogNo", opt.value);
-                          setOpen(false);
+                          multipleValues
+                            ? setValues(field.value, opt.value)
+                            : setValue(opt.value);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            field.value === opt.value
-                              ? "opacity-100"
-                              : "opacity-0",
+                            multipleValues
+                              ? null
+                              : field.value === opt.value
+                                ? "opacity-100"
+                                : "opacity-0",
                           )}
                         />
                         {opt.label}

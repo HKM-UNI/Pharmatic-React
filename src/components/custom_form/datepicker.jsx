@@ -22,11 +22,11 @@ import { useContext } from "react";
 import { FormContext } from "./form";
 
 export function DatePicker({ fieldname, label = "Fecha" }) {
-  const control = useContext(FormContext);
+  const form = useContext(FormContext);
 
   return (
     <FormField
-      control={control}
+      control={form.control}
       name={fieldname}
       render={({ field }) => (
         <FormItem className="space-y-2">
@@ -52,9 +52,7 @@ export function DatePicker({ fieldname, label = "Fecha" }) {
                 mode="single"
                 selected={field.value}
                 onSelect={field.onChange}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
-                }
+                disabled={(date) => date < new Date("1900-01-01")}
                 initialFocus
               />
             </PopoverContent>
