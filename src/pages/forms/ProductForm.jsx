@@ -30,6 +30,11 @@ const tagSchema = yup.object().shape({
 });
 
 const requiredMessage = "Este campo es requerido";
+const positiveInteger = yup
+  .number()
+  .integer("No se admiten decimales")
+  .positive("No se admiten signos")
+  .transform((value) => (isNaN(value) ? null : value));
 
 const formSchema = yup
   .object({
@@ -37,27 +42,15 @@ const formSchema = yup
     categoryNo: yup.number().nullable(),
     subcategoryNo: yup.number().nullable(),
     providerNo: yup.number().nullable(),
-    contentSize: yup
-      .number()
-      .integer()
+    contentSize: positiveInteger
       .moreThan(0, "Cantidad debe ser mayor a 0")
       .nonNullable(requiredMessage)
       .required(requiredMessage),
     unit: yup.string().oneOf(allowedUnits).required(),
-    discount: yup
-      .number()
-      .positive("No se admiten signos")
-      .max(100, "No puede ser mas del 100%")
-      .nullable(),
+    discount: positiveInteger.max(100, "No puede ser mas del 100%").nullable(),
     consign: yup.bool(),
-    purchasePriceUnit: yup
-      .number()
-      .positive("No se admiten signos")
-      .nonNullable(requiredMessage),
-    sellingPriceUnit: yup
-      .number()
-      .positive("No se admiten signos")
-      .nonNullable(requiredMessage),
+    purchasePriceUnit: positiveInteger.nonNullable(requiredMessage),
+    sellingPriceUnit: positiveInteger.nonNullable(requiredMessage),
     expirationDate: yup
       .date()
       .min(
