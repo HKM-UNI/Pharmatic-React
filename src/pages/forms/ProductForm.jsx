@@ -14,13 +14,14 @@ import { DatePicker } from "@/components/custom_form";
 import { CirclePlus } from "lucide-react";
 import { useAdminRoutes } from "@/hooks/adminRoute_hooks";
 import { useDosageForms } from "@/hooks/dosageForm_hooks";
+import { useTags } from "@/hooks/tag_hooks";
 
 const today = new Date();
 const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
 
 const tagSchema = yup.object().shape({
-  tagNo: yup.number(),
-  name: yup.string(),
+  value: yup.number(),
+  label: yup.string(),
 });
 
 const formSchema = yup
@@ -65,7 +66,9 @@ const productDefaults = {
   consign: false,
   purchasePrice: null,
   sellingPrice: null,
-  tags: "",
+  adminRouteNo: null,
+  dosageFormNo: null,
+  tags: null,
 };
 
 export default function ProductForm() {
@@ -98,6 +101,7 @@ export default function ProductForm() {
     admRouteError,
     updateAdmRouteList,
   ] = useAdminRoutes();
+  const [tags, tagIsLoading, tagError, updateTagList] = useTags();
 
   if (
     catalogIsLoading ||
@@ -105,7 +109,8 @@ export default function ProductForm() {
     subcategoryIsLoading ||
     providerIsLoading ||
     dosageFormIsLoading ||
-    admRouteIsLoading
+    admRouteIsLoading ||
+    tagIsLoading
   ) {
     return <LoadingPanel />;
   }
@@ -237,6 +242,18 @@ export default function ProductForm() {
               fieldname="discount"
               label="Descuento"
               placeholder="0"
+            />
+
+            <FormComboBox
+              options={tags.map((t) => ({
+                value: t.tagNo,
+                label: t.name,
+              }))}
+              fieldname="tags"
+              searchPlaceHolder="Buscar Tag"
+              selectPlaceHolder="Selecciona Tag"
+              label="Tags"
+              multipleValues={true}
             />
           </div>
         </div>
