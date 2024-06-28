@@ -66,14 +66,14 @@ export default function ProductForm() {
       rightActions={
         <>
           <Button variant="destructive">Cancelar</Button>
-          <Button form="provider-form" type="submit">
+          <Button form="product-form" type="submit">
             Agregar
           </Button>
         </>
       }
     >
       <Form
-        id="provider-form"
+        id="product-form"
         form={form}
         onValidSubmit={onSubmit}
         className="h-full px-10 py-5"
@@ -86,7 +86,7 @@ export default function ProductForm() {
               setOpen={cbCatalogSetOpen}
               value={cbCatalogValue}
               setValue={cbCatalogSetValue}
-              fieldname="name"
+              fieldname="catalogNo"
             />
           </div>
         </div>

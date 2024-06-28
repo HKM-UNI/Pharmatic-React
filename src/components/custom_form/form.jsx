@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { Form as ShadcnForm } from "../ui/form";
 
 import {
@@ -29,7 +29,7 @@ import {
 } from "../ui/command";
 import { cn } from "@/lib/utils";
 
-export const FormControlContext = createContext(null);
+export const FormContext = createContext(null);
 
 export function Form({
   form,
@@ -45,9 +45,7 @@ export function Form({
         className={className}
         {...props}
       >
-        <FormControlContext.Provider value={form.control}>
-          {children}
-        </FormControlContext.Provider>
+        <FormContext.Provider value={form}>{children}</FormContext.Provider>
       </form>
     </ShadcnForm>
   );
@@ -60,11 +58,11 @@ export function FormInput({
   placeholder = "Valor",
   ...props
 }) {
-  const control = useContext(FormControlContext);
+  const form = useContext(FormContext);
 
   return (
     <FormField
-      control={control}
+      control={form.control}
       name={fieldname}
       render={({ field }) => (
         <FormItem>
@@ -92,11 +90,11 @@ export function FormSelect({
   options = [{ label: "", value: "" }],
   ...props
 }) {
-  const control = useContext(FormControlContext);
+  const form = useContext(FormContext);
 
   return (
     <FormField
-      control={control}
+      control={form.control}
       name={fieldname}
       render={({ field }) => (
         <FormItem>
@@ -129,21 +127,18 @@ export function FormSelect({
 export function FormComboBox({
   fieldname,
   label = "ComboBox",
-  open = false,
-  setOpen = () => null,
-  value = null,
-  setValue = () => null,
   options = [],
   selectPlaceHolder = "Select value",
   searchPlaceHolder = "Search value",
   notFoundMessage = "Value not found",
   ...props
 }) {
-  const control = useContext(FormControlContext);
+  const form = useContext(FormContext);
+  const [open, setOpen] = useState(false);
 
   return (
     <FormField
-      control={control}
+      control={form.control}
       name={fieldname}
       render={({ field }) => (
         <FormItem>
@@ -153,16 +148,16 @@ export function FormComboBox({
               <Button
                 variant="outline"
                 role="combobox"
+                className="justify-between"
                 aria-expanded={open}
-                className="w-[200px] justify-between"
               >
-                {value
-                  ? options.find((opt) => opt.value === value)?.label
+                {field.value
+                  ? options.find((opt) => opt.value === field.value)?.label
                   : selectPlaceHolder}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="p-0">
               <Command>
                 <CommandInput placeholder={searchPlaceHolder} />
                 <CommandList>
@@ -172,15 +167,17 @@ export function FormComboBox({
                       <CommandItem
                         key={idx}
                         value={opt.value}
-                        onSelect={(currentValue) => {
-                          setValue(currentValue === value ? "" : currentValue);
+                        onSelect={() => {
+                          form.setValue("catalogNo", opt.value);
                           setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            value === opt.value ? "opacity-100" : "opacity-0",
+                            field.value === opt.value
+                              ? "opacity-100"
+                              : "opacity-0",
                           )}
                         />
                         {opt.label}

@@ -9,7 +9,7 @@ import useSWR from "swr";
  * @returns {[Array<Catalog>, boolean, Error | null | undefined, catalogListUpdateTrigger]}
  */
 export function useCatalogs() {
-  const { data, isLoading, error, mutate } = useSWR("products/catalog");
+  const { data, isLoading, error, mutate } = useSWR("product_catalog");
 
   return [data, isLoading, error, mutate];
 }
