@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { Form as ShadcnForm } from "../ui/form";
+import { FormDescription, Form as ShadcnForm } from "../ui/form";
 
 import {
   FormControl,

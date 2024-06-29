@@ -18,7 +18,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import LoadingPanel from "../LoadingPanel";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  useCreateProduct,
+  useProductData,
+  useUpdateProduct,
+  useUpdateProductImage,
+} from "@/hooks/product_hooks";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
+import { Plus } from "lucide-react";
 
 const today = new Date();
 const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
@@ -82,8 +93,32 @@ const productDefaults = {
   tags: [],
 };
 
-export default function ProductForm() {
+export default function ProductForm({ edit = false }) {
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const { productId } = useParams();
+
+  const [productData, errorOnProductData] = useProductData(productId);
+  const [updateProduct, isUpdating] = useUpdateProduct();
+  const [createProduct, isCreating] = useCreateProduct();
+  const [updateProductImage, isUpdatingImage] = useUpdateProductImage();
+
+  useEffect(() => {
+    if (edit && errorOnProductData) {
+      console.log("There was an error retrieving the product data.");
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was an error retrieving the customer data",
+      });
+    }
+  }, [edit, errorOnProductData]);
+
+  useEffect(() => {
+    if (edit && productData) {
+      form.reset(productData);
+    }
+  }, [productData]);
 
   const form = useForm({
     resolver: yupResolver(formSchema),
@@ -135,20 +170,36 @@ export default function ProductForm() {
     }
   }
 
-  function onSubmit(values) {
-    preProcess(values);
-    console.log(`Formulario: ${JSON.stringify(values)}`);
+  async function handleSubmit(data) {
+    preProcess(data);
+
+    if (edit) {
+      await updateProduct(data);
+    } else {
+      await createProduct(data);
+    }
+
+    navigate("/productos");
   }
 
   function handleCancellation() {
     navigate("/productos");
   }
 
+  const buttonSubmitContent = () => {
+    if (isUpdating || isCreating || isUpdatingImage) {
+      return <Loader2 className="animate-spin"></Loader2>;
+    }
+    return edit ? "Guardar" : "Confirmar";
+  };
+
   return (
     <DynamicPanel
       leftActions={
         <>
-          <h2 className="text-lg font-bold">Nuevo Producto</h2>
+          <h2 className="text-lg font-bold">
+            {edit ? "Editar" : "Nuevo"} Producto
+          </h2>
         </>
       }
       rightActions={
@@ -157,7 +208,7 @@ export default function ProductForm() {
             Cancelar
           </Button>
           <Button form="product-form" type="submit">
-            Agregar
+            {buttonSubmitContent()}
           </Button>
         </>
       }
@@ -165,7 +216,7 @@ export default function ProductForm() {
       <Form
         id="product-form"
         form={form}
-        onValidSubmit={onSubmit}
+        onValidSubmit={handleSubmit}
         className="h-full px-10 py-5"
       >
         <div className="flex justify-center pb-10 pt-5 md:pt-16">
@@ -178,7 +229,20 @@ export default function ProductForm() {
               fieldname="catalogNo"
               searchPlaceHolder="Buscar producto"
               selectPlaceHolder="Selecciona producto"
-              label="Nombre producto"
+              label={
+                <>
+                  Nombre producto{" "}
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="m-0 ml-2 p-0"
+                    size="sm"
+                    onClick={() => alert("hola")}
+                  >
+                    Agregar +
+                  </Button>
+                </>
+              }
             />
 
             <FormComboBox
@@ -295,6 +359,18 @@ export default function ProductForm() {
               selectPlaceHolder="Selecciona Tag"
               label="Tags"
               multipleValues={true}
+            />
+
+            <div className="flex items-center space-x-4">
+              <Switch fieldname="consign" />
+              <Label>En consigna 🛡️</Label>
+            </div>
+
+            <FormInput
+              startAdornment="🖼️"
+              type="file"
+              fieldname="imageUrl"
+              label="Imágen producto"
             />
           </div>
         </div>
