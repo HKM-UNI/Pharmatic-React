@@ -28,8 +28,9 @@ import {
   useUpdateProductImage,
 } from "@/hooks/product_hooks";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect } from "react";
-import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Loader2, Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const today = new Date();
 const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
@@ -168,15 +169,20 @@ export default function ProductForm({ edit = false }) {
     if (values.expirationDate) {
       values.expirationDate = values.expirationDate.toISOString().split("T")[0];
     }
+    values.tags = values.tags.map((t) => ({
+      tagNo: t.value,
+      name: t.label,
+    }));
   }
 
   async function handleSubmit(data) {
     preProcess(data);
-
+    console.log(`Formulario: ${JSON.stringify(data)}`);
     if (edit) {
       await updateProduct(data);
     } else {
-      await createProduct(data);
+      const createdProduct = await createProduct(data);
+      const idProduct = createdProduct.productNo;
     }
 
     navigate("/productos");
@@ -365,13 +371,6 @@ export default function ProductForm({ edit = false }) {
               <Switch fieldname="consign" />
               <Label>En consigna 🛡️</Label>
             </div>
-
-            <FormInput
-              startAdornment="🖼️"
-              type="file"
-              fieldname="imageUrl"
-              label="Imágen producto"
-            />
           </div>
         </div>
       </Form>

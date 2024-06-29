@@ -89,8 +89,15 @@ export function useUpdateProduct() {
 
 export function useUpdateProductImage() {
   const updateProductImage = async (url, { arg: { productNo, image } }) => {
+    const formData = new FormData();
+    formData.append("image", image);
+
     return axios
-      .put(url.replace("update_id", productNo), image)
+      .put(url.replace("update_id", productNo), formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((resp) => resp.data);
   };
 
