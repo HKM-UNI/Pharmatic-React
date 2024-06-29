@@ -1,36 +1,27 @@
-import { DatePicker } from "@/components/custom_form";
 import {
+  DatePicker,
   Form,
-  FormComboBox,
   FormInput,
   FormSelect,
-} from "@/components/custom_form/form";
+  LazyFormComboBox,
+} from "@/components/custom_form";
 import { Button } from "@/components/ui/button";
-import { useAdminRoutes } from "@/hooks/adminRoute_hooks";
-import { useCatalogs } from "@/hooks/catalog_hooks";
-import { useCategories } from "@/hooks/category_hooks";
-import { useDosageForms } from "@/hooks/dosageForm_hooks";
-import { useProviders } from "@/hooks/provider_hooks";
-import { useSubcategories } from "@/hooks/subcategory_hooks";
-import { useTags } from "@/hooks/tag_hooks";
-import DynamicPanel from "@/shared/DynamicPanel";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import LoadingPanel from "../LoadingPanel";
-import { useNavigate, useParams } from "react-router-dom";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 import {
   useCreateProduct,
   useProductData,
   useUpdateProduct,
   useUpdateProductImage,
 } from "@/hooks/product_hooks";
-import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
-import { Loader2, Plus } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import DynamicPanel from "@/shared/DynamicPanel";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import * as yup from "yup";
 
 const today = new Date();
 const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
@@ -105,7 +96,7 @@ export default function ProductForm({ edit = false }) {
   const [updateProductImage, isUpdatingImage] = useUpdateProductImage();
 
   useEffect(() => {
-    if (edit && errorOnProductData) {
+    if (errorOnProductData) {
       console.log("There was an error retrieving the product data.");
       toast({
         variant: "destructive",
@@ -113,7 +104,7 @@ export default function ProductForm({ edit = false }) {
         description: "There was an error retrieving the customer data",
       });
     }
-  }, [edit, errorOnProductData]);
+  }, [errorOnProductData]);
 
   useEffect(() => {
     if (edit && productData) {
@@ -126,63 +117,21 @@ export default function ProductForm({ edit = false }) {
     defaultValues: productDefaults,
   });
 
-  const [catalogs, catalogIsLoading, catalogsError, updateCatalogList] =
-    useCatalogs();
-  const [categories, categoryIsLoading, categoriesError, updateCategoryList] =
-    useCategories();
-  const [
-    subcategories,
-    subcategoryIsLoading,
-    subcategoriesError,
-    updateSubcategoryList,
-  ] = useSubcategories();
-  const [providers, providerIsLoading, providerError, updateProviderList] =
-    useProviders();
-  const [
-    dosageForms,
-    dosageFormIsLoading,
-    dosageFormError,
-    updateDosageFormList,
-  ] = useDosageForms();
-  const [
-    administrationRoutes,
-    admRouteIsLoading,
-    admRouteError,
-    updateAdmRouteList,
-  ] = useAdminRoutes();
-  const [tags, tagIsLoading, tagError, updateTagList] = useTags();
-
-  if (
-    catalogIsLoading ||
-    categoryIsLoading ||
-    subcategoryIsLoading ||
-    providerIsLoading ||
-    dosageFormIsLoading ||
-    admRouteIsLoading ||
-    tagIsLoading
-  ) {
-    return <LoadingPanel />;
-  }
-
   function preProcess(values) {
     values.contentSize += values.unit;
     if (values.expirationDate) {
       values.expirationDate = values.expirationDate.toISOString().split("T")[0];
     }
-    values.tags = values.tags.map((t) => ({
-      tagNo: t.value,
-      name: t.label,
-    }));
+    values.tags = values.tags.map((t) => ({ tagNo: t.value }));
   }
 
   async function handleSubmit(data) {
     preProcess(data);
-    console.log(`Formulario: ${JSON.stringify(data)}`);
+
     if (edit) {
       await updateProduct(data);
     } else {
-      const createdProduct = await createProduct(data);
-      const idProduct = createdProduct.productNo;
+      await createProduct(data);
     }
 
     navigate("/productos");
@@ -227,17 +176,14 @@ export default function ProductForm({ edit = false }) {
       >
         <div className="flex justify-center pb-10 pt-5 md:pt-16">
           <div className="grid w-80 grid-cols-1 gap-3 md:w-2/3 md:grid-cols-2 md:gap-4">
-            <FormComboBox
-              options={catalogs.map((c) => ({
-                value: c.catalogNo,
-                label: c.name,
-              }))}
+            <LazyFormComboBox
+              endpoint="product_catalog"
               fieldname="catalogNo"
               searchPlaceHolder="Buscar producto"
               selectPlaceHolder="Selecciona producto"
               label={
                 <>
-                  Nombre producto{" "}
+                  Nombre producto &ensp;
                   <Button
                     type="button"
                     variant="link"
@@ -249,61 +195,55 @@ export default function ProductForm({ edit = false }) {
                   </Button>
                 </>
               }
+              optionMapper={(c) => ({ label: c.name, value: c.catalogNo })}
             />
 
-            <FormComboBox
-              options={categories.map((c) => ({
-                value: c.categoryNo,
-                label: c.name,
-              }))}
+            <LazyFormComboBox
+              endpoint="categories"
               fieldname="categoryNo"
               searchPlaceHolder="Buscar Categoría"
               selectPlaceHolder="Selecciona Categoría"
               label="Categoría"
+              optionMapper={(c) => ({ label: c.name, value: c.categoryNo })}
             />
 
-            <FormComboBox
-              options={subcategories.map((s) => ({
-                value: s.subcategoryNo,
-                label: s.name,
-              }))}
+            <LazyFormComboBox
+              endpoint="subcategories"
               fieldname="subcategoryNo"
               searchPlaceHolder="Buscar sub categoría"
               selectPlaceHolder="Selecciona Sub categoría"
               label="Sub categoría"
+              optionMapper={(s) => ({ label: s.name, value: s.subcategoryNo })}
             />
 
-            <FormComboBox
-              options={providers.map((p) => ({
-                value: p.providerNo,
-                label: p.name,
-              }))}
+            <LazyFormComboBox
+              endpoint="providers"
               fieldname="providerNo"
               searchPlaceHolder="Buscar Proveedor"
               selectPlaceHolder="Selecciona Proveedor"
               label="Proveedor"
+              optionMapper={(p) => ({ label: p.name, value: p.providerNo })}
             />
 
-            <FormComboBox
-              options={dosageForms.map((d) => ({
-                value: d.dosageFormNo,
-                label: d.name,
-              }))}
+            <LazyFormComboBox
+              endpoint="dosage_forms"
               fieldname="dosageFormNo"
               searchPlaceHolder="Buscar tipo de dósis"
               selectPlaceHolder="Selecciona tipo de dósis"
               label="Tipo de dósis"
+              optionMapper={(d) => ({ label: d.name, value: d.dosageFormNo })}
             />
 
-            <FormComboBox
-              options={administrationRoutes.map((a) => ({
-                value: a.adminRouteNo,
-                label: a.description,
-              }))}
+            <LazyFormComboBox
+              endpoint="admin_routes"
               fieldname="adminRouteNo"
               searchPlaceHolder="Buscar Vía de administración"
               selectPlaceHolder="Selecciona Vía de administración"
               label="Vía de administración"
+              optionMapper={(a) => ({
+                label: a.description,
+                value: a.adminRouteNo,
+              })}
             />
 
             <div className="flex flex-row items-end gap-2">
@@ -355,16 +295,14 @@ export default function ProductForm({ edit = false }) {
               placeholder="0"
             />
 
-            <FormComboBox
-              options={tags.map((t) => ({
-                value: t.tagNo,
-                label: t.name,
-              }))}
+            <LazyFormComboBox
+              endpoint="tags"
               fieldname="tags"
               searchPlaceHolder="Buscar Tag"
               selectPlaceHolder="Selecciona Tag"
               label="Tags"
               multipleValues={true}
+              optionMapper={(t) => ({ label: t.name, value: t.tagNo })}
             />
 
             <div className="flex items-center space-x-4">
