@@ -5,6 +5,8 @@ export const allowedUnits = ["g", "mg", "ml", "cc"];
 const today = new Date();
 export const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
 
+// Este es un custom esquema que despues puede ser llamado como
+//  yup.mixed().optionalImageFile()
 yup.addMethod(yup.mixed, "optionalImageFile", function () {
   return this.test(
     "fileType",

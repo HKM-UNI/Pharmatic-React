@@ -22,20 +22,34 @@ import { productFormDefaults, productFormSchema } from "./ProductFormSchema";
 
 /** @typedef {import("@/data/product").Product} Product */
 
+/* Este form se compone de dos partes: Una básica y una Avanzada
+
+  Siempre que se usen los elementos de "custom_form"
+   no hay problema incluso si tuviera una tercera parte,
+   debido a que cada uno recupera el "form" mediante "FormContext".
+*/
+
 export function ProductForm({ edit = false }) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { productId } = useParams();
 
+  /* Ya que "productId" puede ser "undefined" o "null",
+      "producData" también puede ser "undefined" o "null"
+      y debe ser validado en cualquier parte.
+  */
   const [productData, errorOnProductData] = useProductData(productId);
+
+  // Opciones iniciales para los LazyFormComboBox
   const initialOpts = useInitialFormOptions(productData);
 
   const [updateProduct, isUpdating] = useUpdateProduct();
   const [createProduct, isCreating] = useCreateProduct();
   const [updateProductImage, isUpdatingImage] = useUpdateProductImage();
 
+  // Esta es la ruta que se usara en la imagen
+  // En modo edicion se cambia a una ruta "ObjectUrl" que corresponde a la del producto.
   const [defaultImageSrc, setDefaultImageSrc] = useState("/drug_default.png");
-  const imgChangedRef = useRef(false);
 
   const form = useForm({
     resolver: yupResolver(productFormSchema),
@@ -54,12 +68,20 @@ export function ProductForm({ edit = false }) {
 
   useEffect(() => {
     if (edit && productData) {
+      // Si esta en modo edicion y se recuperaron correctamente los datos del producto
+      // Actualiza los valores del formulario
       updateProductForm(productData);
     }
   }, [productData]);
 
   /** @param {Product} p */
   function updateProductForm(p) {
+    /*
+      "formData" contendrá los valores transformados para coincidir con el esquema.
+      Por ejemplo, "expirationDate" viene en formato string, pero hay que pasarlo a Date
+        o los precios que tambien estan en string, pero hay que pasarlos a numeros.
+      El esquema tampoco tiene datos anidados, entonces tambien necesitan mappping.
+    */
     const formData = {
       catalogNo: p.catalog.catalogNo,
       categoryNo: p.category?.categoryNo,
@@ -86,6 +108,12 @@ export function ProductForm({ edit = false }) {
     form.reset(formData);
   }
 
+  /* Separa el numero y la unidad de medida en "contenSize"
+      y lo establece en el campo de "formData"
+    eje: "500mg" ->
+      formData.contentSize = 500
+      formData.unit = "mg"
+  */
   function updateFormContentSize(formData, contentSize) {
     const match = contentSize.match(/(\d+)(\w+)/);
     const [contentNumber, unit] = match.slice(1);
@@ -98,6 +126,7 @@ export function ProductForm({ edit = false }) {
     fetchImageAsObjectUrl(url).then((objUrl) => setDefaultImageSrc(objUrl));
   }
 
+  // Vuelve a procesar los datos para coincidir con los de backend.
   function preProcess(data) {
     data.contentSize += data.unit;
     if (data.expirationDate) {
@@ -111,15 +140,20 @@ export function ProductForm({ edit = false }) {
     let product = { productNo: 0 };
 
     if (edit) {
-      // Monkeypatch ya que esto es data del formulario y no directamente de la response en modo edicion
+      /* En otros formularios como "CustomerForm" o "ProviderForm"
+          "data" es un objeto recibido directamente de backend,
+          por lo que ya tiene Id's como "customerNo" o "providerNo",
+
+          Pero en este caso, son datos de "formData"
+            asi que es necesario agregarle el "productNo".
+      */
       data.productNo = productId;
       product = await updateProduct(data);
     } else {
       product = await createProduct(data);
     }
 
-    // Evita subir la misma imagen si no se ha cambiado
-    if (imgChangedRef.current && data.imageFile) {
+    if (data.imageFile) {
       await updateProductImage({
         productNo: product.productNo,
         image: data.imageFile,
@@ -174,7 +208,6 @@ export function ProductForm({ edit = false }) {
             <ProductFormBasic
               initialOptions={initialOpts}
               defaultImgSrc={defaultImageSrc}
-              onImageChange={() => (imgChangedRef.current = true)}
             />
           </TabsContent>
           <TabsContent value="advanced">

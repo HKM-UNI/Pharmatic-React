@@ -118,7 +118,14 @@ export function FormSelect({
  * @returns {void}
  */
 
-/** @param {{fieldname: string, placeholder: string, onFileChange: FileChangedCallback}} */
+/* "FormFileInput" No existe en los componentes de ShadCn
+   Solamente es un input personalizado de tipo "file"
+   Aunque tiene hardcodeado el filtro de imagenes en "accept".
+
+  Si se necesita manejar una previsualizacion, hay un ejemplo en "ProductFormImage".
+*/
+
+/** @param {{fieldname: string, onFileChange: FileChangedCallback}} */
 export function FormFileInput({ fieldname, onFileChange = () => {} }) {
   const form = useContext(FormContext);
   return (
