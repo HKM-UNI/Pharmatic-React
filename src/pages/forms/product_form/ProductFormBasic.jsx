@@ -11,14 +11,9 @@ import ProductFormImage from "./ProductFormImage";
 import { allowedUnits, nextMonth } from "./ProductFormSchema";
 
 /** @typedef {import("@/hooks/product_hooks").InitialProductFormOptions} InitialProductFormOptions */
-/** @typedef {import("./ProductFormImage").ImageChangedCallback} ImageChangedCallback */
 
-/** @param {{ initialOptions: InitialProductFormOptions, defaultImgSrc: string, onImageChange: ImageChangedCallback }} */
-export default function ProductFormBasic({
-  initialOptions,
-  defaultImgSrc,
-  onImageChange = () => {},
-}) {
+/** @param {{ initialOptions: InitialProductFormOptions, defaultImgSrc: string }} */
+export default function ProductFormBasic({ initialOptions, defaultImgSrc }) {
   return (
     <div className="flex items-start justify-center gap-10 pb-5 pt-5 2xl:pt-16">
       <div className="w-80 space-y-4 md:w-2/5 2xl:w-1/4">
@@ -96,10 +91,7 @@ export default function ProductFormBasic({
         </div>
       </div>
 
-      <ProductFormImage
-        defaultSrc={defaultImgSrc}
-        onChange={onImageChange}
-      />
+      <ProductFormImage defaultSrc={defaultImgSrc} />
     </div>
   );
 }

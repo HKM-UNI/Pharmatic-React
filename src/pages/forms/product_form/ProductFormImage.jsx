@@ -1,13 +1,8 @@
 import { FormFileInput } from "@/components/custom_form/form";
 import { useEffect, useState } from "react";
 
-/**
- * @callback ImageChangedCallback
- * @returns {void}
- */
-
-/** @param {{defaultSrc: string, onChange: ImageChangedCallback}} */
-export default function ProductFormImage({ defaultSrc, onChange = () => {} }) {
+/** @param {{ defaultSrc: string }} */
+export default function ProductFormImage({ defaultSrc }) {
   const [previewSrc, setPreviewSrc] = useState(defaultSrc);
 
   useEffect(() => {
@@ -16,13 +11,14 @@ export default function ProductFormImage({ defaultSrc, onChange = () => {} }) {
     }
   }, [defaultSrc]);
 
+  // Esta funcion permite leer los datos del archivo
+  //  para asi mostrarla en la previsualizacion.
   const handleSelectedFile = (file) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewSrc(reader.result);
     };
     reader.readAsDataURL(file);
-    onChange();
   };
 
   return (

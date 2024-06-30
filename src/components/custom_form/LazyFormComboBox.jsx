@@ -32,16 +32,23 @@ import { FormContext } from "./form";
 
 /**
  * @typedef Props
- * @property {string} fieldname
- * @property {string} endpoint
- * @property {string} label
- * @property {ComboBoxMapFn} optionMapper
+ * @property {string} fieldname Nombre del campo en el formulario
+ * @property {string} endpoint  Url de los datos de backend
+ * @property {string} label     Texto descriptivo
+ * @property {ComboBoxMapFn} optionMapper Funcion para convertir cada elemento a un objeto {@link ComboBoxOption}
  * @property {string} selectPlaceHolder
  * @property {string} searchPlaceHolder
  * @property {string} notFoundMessage
- * @property {boolean} multipleValues
- * @property {ComboBoxOption[]} initialOptions
+ * @property {boolean} multipleValues Si se pueden elegir multiples valores
+ * @property {ComboBoxOption[]} initialOptions Valores iniciales para mostrar
  */
+
+/* 
+  Este es un ComboBox eficiente que puede recuperar datos de backend
+    solo cuando sea desplegado.
+  
+  Tambien puede recibir datos iniciales en "initialOptions".
+*/
 
 /** @param {Props} */
 export function LazyFormComboBox({

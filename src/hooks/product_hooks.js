@@ -171,6 +171,9 @@ const initialFormOptionsState = {
   tags: [],
 };
 
+/* Este hook se usa para transformar los objetos de seleccion multiple del producto
+    a datos que pueda usar el LazyFormComboBox
+ */
 export function useInitialFormOptions(productData) {
   const [state, setState] = useState(initialFormOptionsState);
 
@@ -186,6 +189,9 @@ export function useInitialFormOptions(productData) {
         tags: t,
       } = productData;
 
+      // Algunas propiedades del producto son nullables
+      // Por lo que es necesario usar el ternatio para asignar un arreglo vacío
+      //  cuando sea necesario.
       setState({
         catalogs: [{ value: c.catalogNo, label: c.name }],
         categories: cat ? [{ value: cat.categoryNo, label: cat.name }] : [],
