@@ -12,6 +12,7 @@ import PublicRoute from "./PublicRoute";
 import Products from "@/pages/Products";
 import Metadata from "@/pages/Metadata";
 import ProductForm from "@/pages/forms/ProductForm";
+import Dashboard from "@/pages/Dashboard";
 
 export function AppRouter() {
   return (
@@ -43,7 +44,7 @@ export function AppRouter() {
 
 const MainContentRoutes = () => (
   <>
-    <Route index path="dashboard" element={<NotFound />} />
+    <Route index path="dashboard" element={<Dashboard />} />
     {SalesRoutes()}
     {CustomerRoutes()}
     {ProviderRoutes()}
@@ -93,4 +94,9 @@ const MetaDataRoutes = () => (
   </>
 );
 
-const ProductRoutes = () => (<><Route path="productos" element={<Products />} /> <Route path="productos/agregar" element={<ProductForm/>} /></>);
+const ProductRoutes = () => (
+  <>
+    <Route path="productos" element={<Products />} />{" "}
+    <Route path="productos/agregar" element={<ProductForm />} />
+  </>
+);

@@ -108,3 +108,35 @@ export function useUpdateProductImage() {
 
   return [trigger, isMutating, error];
 }
+
+/**
+ * Updates the product list via API
+ * @callback recentProductListUpdateTrigger
+ * @param {Array<RecentProduct>} data
+ */
+
+/**
+ * @returns {[Array<RecentProduct>, boolean, Error | null | undefined, recentProductListUpdateTrigger]}
+ */
+export function useRecentProducts() {
+  const { data, isLoading, error, mutate } = useSWR("products/recent_updates");
+
+  return [data, isLoading, error, mutate];
+}
+
+/**
+ * Updates the product list via API
+ * @callback productExpirationListUpdateTrigger
+ * @param {Array<ProductExpiration>} data
+ */
+
+/**
+ * @returns {[Array<ProductExpiration>, boolean, Error | null | undefined, productExpirationListUpdateTrigger]}
+ */
+export function useProductExpiration() {
+  const { data, isLoading, error, mutate } = useSWR(
+    "products/expiration_report",
+  );
+
+  return [data, isLoading, error, mutate];
+}
