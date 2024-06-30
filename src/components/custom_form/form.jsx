@@ -110,3 +110,40 @@ export function FormSelect({
     />
   );
 }
+
+/**
+ *  @callback FileChangedCallback
+ * @param {File} file
+ * @returns {void}
+ */
+
+/** @param {{fieldname: string, placeholder: string, onFileChange: FileChangedCallback}} */
+export function FormFileInput({ fieldname, onFileChange = () => {} }) {
+  const form = useContext(FormContext);
+  return (
+    <FormField
+      control={form.control}
+      name={fieldname}
+      render={({ field: { value, onChange, ...fieldProps } }) => (
+        <FormItem>
+          <FormControl>
+            <Input
+              {...fieldProps}
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const selectedFile =
+                  event.target.files && event.target.files[0];
+                if (selectedFile) {
+                  onFileChange(selectedFile);
+                }
+                return onChange(selectedFile);
+              }}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}

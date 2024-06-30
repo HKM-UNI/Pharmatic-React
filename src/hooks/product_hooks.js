@@ -78,8 +78,7 @@ export function useUpdateProduct() {
  * Updates a product image via API
  * @async
  * @callback productUpdateImageTrigger
- * @param {string} productNo - The product number
- * @param {File} image - The image file
+ * @param {{productNo: number, image: File}} data
  * @returns {Promise<any>}
  */
 
