@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 export const FormContext = createContext(null);
 
@@ -142,6 +143,28 @@ export function FormFileInput({ fieldname, onFileChange = () => {} }) {
             />
           </FormControl>
           <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
+/** @param {{fieldname: string}} */
+export function FormSwitch({ fieldname, ...props }) {
+  const form = useContext(FormContext);
+  return (
+    <FormField
+      control={form.control}
+      name={fieldname}
+      render={({ field }) => (
+        <FormItem>
+          <FormControl>
+            <Switch
+              checked={field.value}
+              onCheckedChange={field.onChange}
+              {...props}
+            />
+          </FormControl>
         </FormItem>
       )}
     />

@@ -2,15 +2,23 @@ import {
   DatePicker,
   FormInput,
   FormSelect,
+  FormSwitch,
   LazyFormComboBox,
 } from "@/components/custom_form";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import ProductFormImage from "./ProductFormImage";
 import { allowedUnits, nextMonth } from "./ProductFormSchema";
 
-export default function ProductFormBasic() {
+/** @typedef {import("@/hooks/product_hooks").InitialProductFormOptions} InitialProductFormOptions */
+/** @typedef {import("./ProductFormImage").ImageChangedCallback} ImageChangedCallback */
+
+/** @param {{ initialOptions: InitialProductFormOptions, defaultImgSrc: string, onImageChange: ImageChangedCallback }} */
+export default function ProductFormBasic({
+  initialOptions,
+  defaultImgSrc,
+  onImageChange = () => {},
+}) {
   return (
     <div className="flex items-start justify-center gap-10 pb-5 pt-5 2xl:pt-16">
       <div className="w-80 space-y-4 md:w-2/5 2xl:w-1/4">
@@ -19,6 +27,7 @@ export default function ProductFormBasic() {
           fieldname="catalogNo"
           searchPlaceHolder="Buscar producto"
           selectPlaceHolder="Selecciona producto"
+          initialOptions={initialOptions.catalogs}
           label={
             <>
               Nombre producto &ensp;
@@ -81,13 +90,16 @@ export default function ProductFormBasic() {
           />
 
           <div className="col-span-2 mt-3 flex items-center justify-end space-x-4">
-            <Switch fieldname="consign" />
+            <FormSwitch fieldname="consign" />
             <Label>En consigna 🛡️</Label>
           </div>
         </div>
       </div>
 
-      <ProductFormImage defaultSrc="/drug_default.png" />
+      <ProductFormImage
+        defaultSrc={defaultImgSrc}
+        onChange={onImageChange}
+      />
     </div>
   );
 }

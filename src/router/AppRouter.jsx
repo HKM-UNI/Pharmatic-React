@@ -96,5 +96,9 @@ const ProductRoutes = () => (
   <>
     <Route path="productos" element={<Products />} />{" "}
     <Route path="productos/agregar" element={<ProductForm />} />
+    <Route
+      path="productos/editar/:productId"
+      element={<ProductForm edit={true} />}
+    />
   </>
 );

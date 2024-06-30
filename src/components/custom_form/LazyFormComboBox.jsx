@@ -40,10 +40,8 @@ import { FormContext } from "./form";
  * @property {string} searchPlaceHolder
  * @property {string} notFoundMessage
  * @property {boolean} multipleValues
+ * @property {ComboBoxOption[]} initialOptions
  */
-
-/** @type {ComboBoxOption[]} */
-const initialOptionsState = [];
 
 /** @param {Props} */
 export function LazyFormComboBox({
@@ -55,10 +53,11 @@ export function LazyFormComboBox({
   searchPlaceHolder = "Search value",
   notFoundMessage = "Value not found",
   multipleValues = false,
+  initialOptions = [],
 }) {
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useSWR(open && endpoint);
-  const [options, setOptions] = useState(initialOptionsState);
+  const [options, setOptions] = useState(initialOptions);
   const form = useContext(FormContext);
 
   useEffect(() => {
@@ -66,6 +65,12 @@ export function LazyFormComboBox({
       setOptions(data.map((d) => optionMapper(d)));
     }
   }, [data]);
+
+  useEffect(() => {
+    if (initialOptions && !data) {
+      setOptions(initialOptions);
+    }
+  }, [initialOptions]);
 
   const selectedText = (selected) => {
     if (multipleValues) {
