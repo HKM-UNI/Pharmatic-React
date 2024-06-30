@@ -48,7 +48,7 @@ const providerDefaults = {
   phone: null,
 };
 
-export default function ProviderForm({ edit = false }) {
+export function ProviderForm({ edit = false }) {
   const { toast } = useToast();
   const navigate = useNavigate();
 

@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import { FormDescription, Form as ShadcnForm } from "../ui/form";
+import { createContext, useContext } from "react";
+import { Form as ShadcnForm } from "../ui/form";
 
 import {
   FormControl,
@@ -16,18 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Button } from "../ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../ui/command";
-import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
 
 export const FormContext = createContext(null);
 
@@ -123,102 +112,59 @@ export function FormSelect({
   );
 }
 
-export function FormComboBox({
-  fieldname,
-  label = "ComboBox",
-  options = [],
-  selectPlaceHolder = "Select value",
-  searchPlaceHolder = "Search value",
-  notFoundMessage = "Value not found",
-  multipleValues = false,
-  ...props
-}) {
+/**
+ *  @callback FileChangedCallback
+ * @param {File} file
+ * @returns {void}
+ */
+
+/** @param {{fieldname: string, placeholder: string, onFileChange: FileChangedCallback}} */
+export function FormFileInput({ fieldname, onFileChange = () => {} }) {
   const form = useContext(FormContext);
-  const [open, setOpen] = useState(false);
+  return (
+    <FormField
+      control={form.control}
+      name={fieldname}
+      render={({ field: { value, onChange, ...fieldProps } }) => (
+        <FormItem>
+          <FormControl>
+            <Input
+              {...fieldProps}
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const selectedFile =
+                  event.target.files && event.target.files[0];
+                if (selectedFile) {
+                  onFileChange(selectedFile);
+                }
+                return onChange(selectedFile);
+              }}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
 
-  const selectedText = (selected) => {
-    if (multipleValues) {
-      if (selected.length >= 1)
-        return selected.map((item) => item.label).join(", ");
-      else return selectPlaceHolder;
-    } else return options.find((opt) => opt.value === selected)?.label;
-  };
-  const setValue = (value) => {
-    form.setValue(fieldname, value);
-    setOpen(false);
-  };
-  const setValues = (values, selectedObj) => {
-    if (values !== null) {
-      if (values.find((v) => v.value === selectedObj.value)) {
-        form.setValue(
-          fieldname,
-          values.filter((v) => v.value !== selectedObj.value),
-        );
-        return null;
-      }
-      form.setValue(fieldname, [...values, selectedObj]);
-    } else form.setValue(fieldname, [selectedObj]);
-  };
-
-  const isSelectedIn = (values, checkValue) => {
-    if (values !== null) {
-      if (multipleValues) {
-        return values.find((v) => v.value === checkValue);
-      } else return values === checkValue;
-    }
-  };
+/** @param {{fieldname: string}} */
+export function FormSwitch({ fieldname, ...props }) {
+  const form = useContext(FormContext);
   return (
     <FormField
       control={form.control}
       name={fieldname}
       render={({ field }) => (
-        <FormItem className="flex flex-col justify-end">
-          <FormLabel>{label}</FormLabel>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                className="justify-between font-normal"
-                aria-expanded={open}
-              >
-                {field.value ? selectedText(field.value) : selectPlaceHolder}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Command>
-                <CommandInput placeholder={searchPlaceHolder} />
-                <CommandList>
-                  <CommandEmpty>{notFoundMessage}</CommandEmpty>
-                  <CommandGroup>
-                    {options.map((opt, idx) => (
-                      <CommandItem
-                        key={idx}
-                        value={opt.value}
-                        onSelect={() => {
-                          multipleValues
-                            ? setValues(field.value, opt)
-                            : setValue(opt.value);
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            isSelectedIn(field.value, opt.value)
-                              ? "opacity-100"
-                              : "opacity-0",
-                          )}
-                        />
-                        {opt.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <FormMessage />
+        <FormItem>
+          <FormControl>
+            <Switch
+              checked={field.value}
+              onCheckedChange={field.onChange}
+              {...props}
+            />
+          </FormControl>
         </FormItem>
       )}
     />
