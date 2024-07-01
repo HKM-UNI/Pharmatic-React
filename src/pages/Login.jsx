@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
-import { LoginForm } from "./forms/LoginForm";
+import { LoginForm } from "./forms";
 
 function Login() {
   return (

@@ -1,0 +1,1 @@
+export { fetchImageAsObjectUrl } from "./fetchImageAsObjectUrl";

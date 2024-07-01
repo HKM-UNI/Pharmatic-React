@@ -1,6 +1,7 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import axios from "axios";
 
 /**
  * @param {number} productNo
@@ -78,8 +79,7 @@ export function useUpdateProduct() {
  * Updates a product image via API
  * @async
  * @callback productUpdateImageTrigger
- * @param {string} productNo - The product number
- * @param {File} image - The image file
+ * @param {{productNo: number, image: File}} data
  * @returns {Promise<any>}
  */
 
@@ -139,4 +139,72 @@ export function useProductExpiration() {
   );
 
   return [data, isLoading, error, mutate];
+}
+
+/** @typedef {import("@/components/custom_form/LazyFormComboBox").ComboBoxOption} ComboBoxOption */
+/** @typedef {import("@/data/product").Product} Product */
+
+/**
+ * @typedef InitialProductFormOptions
+ * @property {ComboBoxOption[]} catalogs
+ * @property {ComboBoxOption[]} categories
+ * @property {ComboBoxOption[]} subcategories
+ * @property {ComboBoxOption[]} dosageForms
+ * @property {ComboBoxOption[]} adminRoutes
+ * @property {ComboBoxOption[]} providers
+ * @property {ComboBoxOption[]} tags
+ */
+
+/**
+ * @param {Product} productData
+ * @returns {InitialProductFormOptions}
+ */
+
+/** @type {InitialProductFormOptions} */
+const initialFormOptionsState = {
+  catalogs: [],
+  categories: [],
+  subcategories: [],
+  dosageForms: [],
+  adminRoutes: [],
+  providers: [],
+  tags: [],
+};
+
+/* Este hook se usa para transformar los objetos de seleccion multiple del producto
+    a datos que pueda usar el LazyFormComboBox
+ */
+export function useInitialFormOptions(productData) {
+  const [state, setState] = useState(initialFormOptionsState);
+
+  useEffect(() => {
+    if (productData) {
+      const {
+        catalog: c,
+        category: cat,
+        subcategory: sc,
+        dosageForm: df,
+        adminRoute: ar,
+        provider: p,
+        tags: t,
+      } = productData;
+
+      // Algunas propiedades del producto son nullables
+      // Por lo que es necesario usar el ternatio para asignar un arreglo vacío
+      //  cuando sea necesario.
+      setState({
+        catalogs: [{ value: c.catalogNo, label: c.name }],
+        categories: cat ? [{ value: cat.categoryNo, label: cat.name }] : [],
+        subcategories: sc ? [{ value: sc.subcategoryNo, label: sc.name }] : [],
+        dosageForms: df ? [{ value: df.dosageFormNo, label: df.name }] : [],
+        adminRoutes: ar
+          ? [{ value: ar.adminRouteNo, label: ar.description }]
+          : [],
+        providers: p ? [{ value: p.providerNo, label: p.name }] : [],
+        tags: t.map((i) => ({ value: i.tagNo, label: i.name })),
+      });
+    }
+  }, [productData]);
+
+  return state;
 }

@@ -57,7 +57,7 @@ const customerDefaults = {
   birthDate: null,
 };
 
-export default function CustomerForm({ edit = false }) {
+export function CustomerForm({ edit = false }) {
   const { toast } = useToast();
   const navigate = useNavigate();
   /* Parametro recuperado de la url del Router

@@ -1,18 +1,16 @@
 import Customers from "@/pages/Customers";
+import Dashboard from "@/pages/Dashboard";
 import Login from "@/pages/Login";
+import Metadata from "@/pages/Metadata";
 import NotFound from "@/pages/NotFound";
+import Products from "@/pages/Products";
 import Providers from "@/pages/Providers";
 import SalesHistory from "@/pages/SalesHistory";
-import CustomerForm from "@/pages/forms/CustomerForm";
-import ProviderForm from "@/pages/forms/ProviderForm";
+import { CustomerForm, ProductForm, ProviderForm } from "@/pages/forms";
 import MainLayout from "@/shared/MainLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
-import Products from "@/pages/Products";
-import Metadata from "@/pages/Metadata";
-import ProductForm from "@/pages/forms/ProductForm";
-import Dashboard from "@/pages/Dashboard";
 import Users from "@/pages/Users";
 
 export function AppRouter() {
@@ -100,5 +98,9 @@ const ProductRoutes = () => (
   <>
     <Route path="productos" element={<Products />} />{" "}
     <Route path="productos/agregar" element={<ProductForm />} />
+    <Route
+      path="productos/editar/:productId"
+      element={<ProductForm edit={true} />}
+    />
   </>
 );
