@@ -13,6 +13,7 @@ import Products from "@/pages/Products";
 import Metadata from "@/pages/Metadata";
 import ProductForm from "@/pages/forms/ProductForm";
 import Dashboard from "@/pages/Dashboard";
+import Users from "@/pages/Users";
 
 export function AppRouter() {
   return (
@@ -45,6 +46,7 @@ export function AppRouter() {
 const MainContentRoutes = () => (
   <>
     <Route index path="dashboard" element={<Dashboard />} />
+    <Route path="usuarios" element={<Users />} />
     {SalesRoutes()}
     {CustomerRoutes()}
     {ProviderRoutes()}

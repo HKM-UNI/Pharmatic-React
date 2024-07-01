@@ -100,6 +100,14 @@ function NavigationLinks() {
         <ProvidersIcon className="mr-3 h-6 w-6" />
         Proveedores
       </NavLink>
+
+      <NavLink
+        to="/usuarios"
+        className={({ isActive }) => getLinkStyle(isActive)}
+      >
+        <UserIcon className="mr-3 h-6 w-6" />
+        Usuarios
+      </NavLink>
     </nav>
   );
 }

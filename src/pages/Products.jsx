@@ -28,7 +28,7 @@ function Products() {
         </>
       }
     >
-      <div className="grid h-full grid-cols-1 gap-6 p-6 md:grid-cols-2 2xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 2xl:grid-cols-3">
         {products.map((p) => (
           <ProductCard
             imageUrl={p.imageUrl}
