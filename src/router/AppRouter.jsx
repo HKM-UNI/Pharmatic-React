@@ -47,7 +47,6 @@ export function AppRouter() {
 const MainContentRoutes = () => (
   <>
     <Route index path="dashboard" element={<Dashboard />} />
-    <Route path="usuarios" element={<Users />} />
     <Route path="ventas/carrito" element={<Cart />} />
     <Route path="ventas/facturacion" element={<Invoicing />} />
     {UserRoutes()}
