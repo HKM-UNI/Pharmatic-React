@@ -16,7 +16,7 @@ import useSWRMutation from "swr/mutation";
  * @returns {[Array<SalesHistory>, boolean, Error | null | undefined, customerListUpdateTrigger]}
  */
 export function useSalesHistory() {
-  const { data, isLoading, error } = useSWR("sales/history");
+  const { data, isLoading, error, mutate } = useSWR("sales/history");
 
   const postProcess = (respData) => {
     if (!respData) {
@@ -30,7 +30,7 @@ export function useSalesHistory() {
     }));
   };
 
-  return [postProcess(data), isLoading, error];
+  return [postProcess(data), isLoading, error, mutate];
 }
 
 export function useCreateInvoice() {
@@ -40,6 +40,29 @@ export function useCreateInvoice() {
   const { trigger, isMutating, error } = useSWRMutation(
     "sales/create",
     createInvoice,
+  );
+
+  return [trigger, isMutating, error];
+}
+
+/**
+ * Deletes a customer via API
+ * @async
+ * @callback salesDeleteTrigger
+ * @param {number} sales_no
+ * @returns {Promise}
+ */
+
+/**
+ * @returns {[salesDeleteTrigger, boolean, Error | null | undefined]}
+ */
+export function useDeleteSales() {
+  const deleteSales = async (url, { arg: sales_no }) =>
+    axios.delete(url.replace("delete_id", sales_no));
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    `sales/delete_id`,
+    deleteSales,
   );
 
   return [trigger, isMutating, error];
