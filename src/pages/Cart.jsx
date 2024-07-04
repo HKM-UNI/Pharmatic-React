@@ -28,7 +28,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCartProducts } from "@/shared/MainContent";
 import { useToast } from "@/components/ui/use-toast";
-import { check } from "prettier";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +40,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
+import {
+  Sheet,
+  SheetContent,
+  SheetOverlay,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Cart() {
   const [products, isLoading, error] = useProducts();
@@ -76,13 +81,17 @@ export default function Cart() {
   return (
     <DynamicPanel
       leftActions={
-        <h2 className="text-lg font-bold">Agregar productos al carrito</h2>
+        <h2 className="text-sm font-bold lg:text-lg">
+          Agregar productos al carrito
+        </h2>
       }
       rightActions={
         <>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">Limpiar productos</Button>
+              <Button variant="destructive" size="responsive">
+                Limpiar productos
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -106,6 +115,7 @@ export default function Cart() {
           <Button
             onClick={() => navigate(`/ventas/facturación`)}
             className="bg-green-600 hover:bg-green-600/90"
+            size="responsive"
           >
             Procesar
           </Button>
@@ -116,63 +126,79 @@ export default function Cart() {
         </>
       }
     >
-      <div className="grid h-full grid-cols-6">
-        <Command className="col-start-1 col-end-3 rounded-xl">
+      <div className="grid h-full grid-cols-1 lg:grid-cols-6">
+        <Command className="rounded-xl lg:col-start-1 lg:col-end-3">
           <CommandInput placeholder="Buscar producto..." />
           <CommandList className="h-full" maxHeight={false}>
             <CommandEmpty>No se encontraron resultados.</CommandEmpty>
             <CommandGroup heading="Productos">
-              {products.map((p) => (
-                <CommandItem
-                  key={p.productNo}
-                  className="my-1 flex flex-grow cursor-pointer gap-x-3 rounded-lg p-3"
-                  style={{
-                    backgroundColor:
-                      selectedProduct === p.productNo &&
-                      "hsla(186, 78%, 42%, 0.2)",
-                  }}
-                  onSelect={() => setSelectedProduct(p.productNo)}
-                  disabled={p.stock > 0 ? false : true}
-                >
-                  <div className="h-20 w-20 flex-none">
-                    <img
-                      src={p.imageUrl}
-                      alt="card image"
-                      className="rounded-xl object-contain"
+              <Sheet>
+                {window.innerWidth >= 1024 || (
+                  <SheetContent side="bottom">
+                    <ProductDetails
+                      productNo={selectedProduct}
+                      setAddedCartProducts={setAddedCartProducts}
+                      addedCartProducts={addedCartProducts}
                     />
-                  </div>
-                  <div className="flex-none">
-                    <div className="mb-3 text-xs font-bold xl:text-sm">
-                      <p>{p.productName}</p>
-                      <p className="font-semibold">{p.categoryName}</p>
-                    </div>
-                    <div className="px-3">
-                      <div className="flex gap-2">
-                        {p.productTags.map((t, i) => (
-                          <Badge key={i} className="cursor-pointer">
-                            {t}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-1 flex-row-reverse self-start">
-                    <p
-                      className={
-                        "text-xs font-bold xl:text-sm " +
-                        `${inStock(p.stock) ? "text-primary" : "text-destructive"}`
-                      }
+                  </SheetContent>
+                )}
+                <SheetTrigger>
+                  {products.map((p) => (
+                    <CommandItem
+                      key={p.productNo}
+                      className="my-1 flex flex-grow cursor-pointer gap-x-3 rounded-lg p-3"
+                      style={{
+                        backgroundColor:
+                          selectedProduct === p.productNo &&
+                          "hsla(186, 78%, 42%, 0.2)",
+                      }}
+                      onSelect={() => setSelectedProduct(p.productNo)}
+                      disabled={p.stock > 0 ? false : true}
                     >
-                      {setQuantityAddedOrStockInformation(p.productNo, p.stock)}
-                    </p>
-                  </div>
-                </CommandItem>
-              ))}
+                      <div className="h-20 w-20 flex-none">
+                        <img
+                          src={p.imageUrl}
+                          alt="card image"
+                          className="rounded-xl object-contain"
+                        />
+                      </div>
+                      <div className="flex-none">
+                        <div className="mb-3 text-xs font-bold xl:text-sm">
+                          <p>{p.productName}</p>
+                          <p className="font-semibold">{p.categoryName}</p>
+                        </div>
+                        <div className="px-3">
+                          <div className="flex gap-2">
+                            {p.productTags.map((t, i) => (
+                              <Badge key={i} className="cursor-pointer">
+                                {t}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-1 flex-row-reverse self-start">
+                        <p
+                          className={
+                            "text-xs font-bold xl:text-sm " +
+                            `${inStock(p.stock) ? "text-primary" : "text-destructive"}`
+                          }
+                        >
+                          {setQuantityAddedOrStockInformation(
+                            p.productNo,
+                            p.stock,
+                          )}
+                        </p>
+                      </div>
+                    </CommandItem>
+                  ))}
+                </SheetTrigger>
+              </Sheet>
             </CommandGroup>
             <CommandSeparator />
           </CommandList>
         </Command>
-        <div className="col-start-3 col-end-7 border-l-2">
+        <div className="hidden lg:col-start-3 lg:col-end-7 lg:block lg:border-l-2">
           {selectedProduct && (
             <ProductDetails
               productNo={selectedProduct}
@@ -226,7 +252,7 @@ function ProductDetails({
     }
 
     const existingProductIndex = addedCartProducts.findIndex(
-      (item) => item.id === product.id,
+      (item) => item.productNo === product.productNo,
     );
 
     if (existingProductIndex > -1) {
@@ -263,7 +289,7 @@ function ProductDetails({
     <div className="flex h-full w-full flex-col p-6 lg:p-12">
       <div className="flex-none">
         <div className="flex flex-grow gap-x-6">
-          <div className="h-20 w-20 flex-none sm:h-32 sm:w-32 lg:h-52 lg:w-52">
+          <div className="h-52 w-52 flex-none">
             <img
               src={product.imageUrl}
               alt="card image"
@@ -271,49 +297,49 @@ function ProductDetails({
             />
           </div>
           <div className="flex-1">
-            <p className="text-xl font-bold md:text-2xl xl:text-3xl">
+            <p className="text-2xl font-bold xl:text-3xl">
               {product.catalog.name}
             </p>
-            <p className="text-lg font-semibold md:text-xl xl:text-2xl">
+            <p className="text-xl font-semibold xl:text-2xl">
               Categoría: {product.category?.name}
             </p>
-            <p className="text-lg font-semibold md:text-xl xl:text-2xl">
+            <p className="text-xl font-semibold xl:text-2xl">
               Sub Categoría: {product.subcategory?.name}
             </p>
           </div>
         </div>
 
         <div className="flex flex-grow justify-center gap-x-10 p-3">
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <UserRound className="h-4 w-4" /> Proveedor:{" "}
             {product.provider?.name}
           </div>
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <Calendar className="h-4 w-4" /> Fecha de expiración:{" "}
             {product.expirationDate}
           </div>
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <Warehouse className="h-4 w-4" /> Stock: {product.stock}
           </div>
         </div>
 
         <div className="flex flex-grow justify-center gap-x-10 p-3">
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <Banknote className="h-4 w-4" /> Precio: C${" "}
             {product.sellingPriceUnit}
           </div>
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <ShieldCheck className="h-4 w-4" /> Consigna:{" "}
             {product.consign ? "Sí" : "No"}
           </div>
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <Syringe className="h-4 w-4" /> Vía de administración:{" "}
             {product.adminRoute?.description}
           </div>
         </div>
 
         <div className="flex justify-center gap-x-3 p-3">
-          <div className="flex items-center gap-2 text-sm md:text-lg xl:text-xl">
+          <div className="flex items-center gap-2 text-lg xl:text-xl">
             <Tag className="h-4 w-4" /> Tags:
           </div>
           {product.tags.map((t, i) => (
@@ -345,7 +371,7 @@ function ProductDetailsLoading() {
   return (
     <>
       <div className="flex flex-grow gap-x-6 p-6 lg:p-12">
-        <Skeleton className="h-20 w-20 flex-none sm:h-32 sm:w-32 lg:h-52 lg:w-52"></Skeleton>
+        <Skeleton className="h-32 w-32 flex-none lg:h-52 lg:w-52"></Skeleton>
         <Skeleton className="flex-1"></Skeleton>
       </div>
       <div className="flex flex-grow justify-center gap-x-10 p-3">
