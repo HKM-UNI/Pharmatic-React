@@ -3,7 +3,7 @@ function DynamicPanel({ children, leftActions, rightActions }) {
   const barVisible = leftActions || rightActions;
 
   return (
-    <div className="flex h-full flex-col rounded-2xl bg-white">
+    <div className="flex h-full flex-col rounded-xl bg-white">
       <div
         className={
           barVisible &&

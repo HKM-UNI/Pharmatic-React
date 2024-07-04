@@ -12,6 +12,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Users from "@/pages/Users";
+import Cart from "@/pages/Cart";
 
 export function AppRouter() {
   return (
@@ -45,6 +46,7 @@ const MainContentRoutes = () => (
   <>
     <Route index path="dashboard" element={<Dashboard />} />
     <Route path="usuarios" element={<Users />} />
+    <Route path="ventas/carrito" element={<Cart />} />
     {SalesRoutes()}
     {CustomerRoutes()}
     {ProviderRoutes()}
