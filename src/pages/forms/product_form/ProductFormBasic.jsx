@@ -15,7 +15,7 @@ import { allowedUnits, nextMonth } from "./ProductFormSchema";
 /** @param {{ initialOptions: InitialProductFormOptions, defaultImgSrc: string }} */
 export default function ProductFormBasic({ initialOptions, defaultImgSrc }) {
   return (
-    <div className="flex items-start justify-center gap-10 pb-5 pt-5 2xl:pt-16">
+    <div className="flex flex-wrap md:flex-nowrap items-start justify-center gap-10 pb-5 pt-5 2xl:pt-16">
       <div className="w-80 space-y-4 md:w-2/5 2xl:w-1/4">
         <LazyFormComboBox
           endpoint="product_catalog"
