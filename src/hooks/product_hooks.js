@@ -233,3 +233,26 @@ export function useDeleteProduct() {
 
   return [trigger, isMutating, error];
 }
+
+/**
+ * Creates a product via API
+ * @async
+ * @callback productCreateCatalogTrigger
+ * @param {{name: string}} data
+ * @returns {Promise}
+ */
+
+/**
+ * @returns {[productCreateTrigger, boolean, Error | null | undefined]}
+ */
+export function useCreateProductCatalog() {
+  const createProduct = async (url, { arg: data }) =>
+    axios.post(url, data).then((resp) => resp.data);
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    "product_catalog/create",
+    createProduct,
+  );
+
+  return [trigger, isMutating, error];
+}

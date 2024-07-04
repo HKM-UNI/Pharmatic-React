@@ -9,13 +9,22 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import ProductFormImage from "./ProductFormImage";
 import { allowedUnits, nextMonth } from "./ProductFormSchema";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import ProductFormName from "./ProductFormName";
+import { useState } from "react";
 
 /** @typedef {import("@/hooks/product_hooks").InitialProductFormOptions} InitialProductFormOptions */
 
 /** @param {{ initialOptions: InitialProductFormOptions, defaultImgSrc: string }} */
 export default function ProductFormBasic({ initialOptions, defaultImgSrc }) {
+  const [popOverOpen, setPopOverOpen] = useState(false);
+
   return (
-    <div className="flex flex-wrap md:flex-nowrap items-start justify-center gap-10 pb-5 pt-5 2xl:pt-16">
+    <div className="flex flex-wrap items-start justify-center gap-10 pb-5 pt-5 md:flex-nowrap 2xl:pt-16">
       <div className="w-80 space-y-4 md:w-2/5 2xl:w-1/4">
         <LazyFormComboBox
           endpoint="product_catalog"
@@ -23,21 +32,27 @@ export default function ProductFormBasic({ initialOptions, defaultImgSrc }) {
           searchPlaceHolder="Buscar producto"
           selectPlaceHolder="Selecciona producto"
           initialOptions={initialOptions.catalogs}
-          label="Nombre Producto"
-          // {
-          //   <>
-          //     Nombre producto &ensp;
-          //     <Button
-          //       type="button"
-          //       variant="link"
-          //       className="m-0 ml-2 p-0"
-          //       size="sm"
-          //       onClick={() => alert("hola")}
-          //     >
-          //       Agregar +
-          //     </Button>
-          //   </>
-          // }
+          label={
+            <>
+              Nombre producto &ensp;
+              <Popover open={popOverOpen}>
+                <PopoverTrigger>
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="m-0 ml-2 p-0"
+                    size="sm"
+                    onClick={() => setPopOverOpen(!popOverOpen)}
+                  >
+                    Agregar +
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <ProductFormName onDone={() => setPopOverOpen(false)} />
+                </PopoverContent>
+              </Popover>
+            </>
+          }
           optionMapper={(c) => ({ label: c.name, value: c.catalogNo })}
         />
 
