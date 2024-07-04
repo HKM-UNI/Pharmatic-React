@@ -1,14 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { useUsers } from "@/hooks/user_hooks";
+import { useDeleteUser, useUsers } from "@/hooks/user_hooks";
 import DynamicPanel from "@/shared/DynamicPanel";
-import React from "react";
+import React, { useContext } from "react";
 import LoadingPanel from "./LoadingPanel";
 import { SquarePen, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "@/auth";
 
 export default function Users() {
+  const { user: authUser } = useContext(AuthContext);
+
   const navigate = useNavigate();
-  const [users, isLoading, error] = useUsers();
+  const [users, isLoading, error, updateUserList] = useUsers();
+  const [removeUser] = useDeleteUser();
 
   if (error) {
     return <Error message="Failed to fetch users." />;
@@ -17,6 +21,12 @@ export default function Users() {
   if (isLoading) {
     return <LoadingPanel />;
   }
+
+  const handleRemoval = async (username) => {
+    await removeUser(username);
+    updateUserList();
+  };
+
   return (
     <DynamicPanel
       rightActions={
@@ -28,41 +38,44 @@ export default function Users() {
       }
     >
       <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-2">
-        {users.map((u) => (
-          <UserCard
-            imageUrl={u.imageUrl}
-            key={u.id}
-            title={
-              <>
-                <p>{u.username}</p>
-                <p className="font-semibold">{u.email}</p>
-                <p className="font-normal">{u.role?.roleName}</p>
-              </>
-            }
-            actions={
-              <>
-                <Button
-                  size="icon"
-                  className="rounded-full border-transparent bg-transparent hover:bg-white"
-                  variant="outline"
-                >
-                  <Trash className="h-3 w-3 md:h-5 md:w-5" color="red" />
-                </Button>
-                <Button
-                  size="icon"
-                  className="rounded-full border-transparent bg-transparent hover:bg-white"
-                  variant="outline"
-                  onClick={() => navigate(`/usuarios/editar/${u.username}`)}
-                >
-                  <SquarePen
-                    className="h-3 w-3 md:h-5 md:w-5"
-                    color="hsla(186, 78%, 42%, 1)"
-                  />
-                </Button>
-              </>
-            }
-          />
-        ))}
+        {users.map((u) =>
+          u.username == authUser?.username ? null : (
+            <UserCard
+              imageUrl={u.imageUrl}
+              key={u.id}
+              title={
+                <>
+                  <p>{u.username}</p>
+                  <p className="font-semibold">{u.email}</p>
+                  <p className="font-normal">{u.role?.roleName}</p>
+                </>
+              }
+              actions={
+                <>
+                  <Button
+                    size="icon"
+                    className="rounded-full border-transparent bg-transparent hover:bg-white"
+                    variant="outline"
+                    onClick={() => handleRemoval(u.username)}
+                  >
+                    <Trash className="h-3 w-3 md:h-5 md:w-5" color="red" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    className="rounded-full border-transparent bg-transparent hover:bg-white"
+                    variant="outline"
+                    onClick={() => navigate(`/usuarios/editar/${u.username}`)}
+                  >
+                    <SquarePen
+                      className="h-3 w-3 md:h-5 md:w-5"
+                      color="hsla(186, 78%, 42%, 1)"
+                    />
+                  </Button>
+                </>
+              }
+            />
+          ),
+        )}
       </div>
     </DynamicPanel>
   );

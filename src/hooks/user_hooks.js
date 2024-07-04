@@ -160,3 +160,26 @@ export function useInitialFormOptions(userData) {
 
   return state;
 }
+
+/**
+ * Deletes a user via API
+ * @async
+ * @callback userDeleteTrigger
+ * @param {string} username
+ * @returns {Promise}
+ */
+
+/**
+ * @returns {[userDeleteTrigger, boolean, Error | null | undefined]}
+ */
+export function useDeleteUser() {
+  const deleteUser = async (url, { arg: username }) =>
+    axios.delete(url.replace("delete_id", username));
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    `users/delete_id`,
+    deleteUser,
+  );
+
+  return [trigger, isMutating, error];
+}
