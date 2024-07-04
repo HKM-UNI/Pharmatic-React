@@ -113,7 +113,7 @@ export default function Cart() {
             </AlertDialogContent>
           </AlertDialog>
           <Button
-            onClick={() => navigate(`/ventas/facturación`)}
+            onClick={() => navigate(`/ventas/facturacion`)}
             className="bg-green-600 hover:bg-green-600/90"
             size="responsive"
           >
@@ -247,6 +247,15 @@ function ProductDetails({
         variant: "destructive",
         title: "Error al agregar producto",
         description: "Producto sin suficiente stock!",
+      });
+      return;
+    }
+
+    if (quantity <= 0) {
+      toast({
+        variant: "destructive",
+        title: "Error al agregar producto",
+        description: "Cantidad debe ser mayor a 0",
       });
       return;
     }

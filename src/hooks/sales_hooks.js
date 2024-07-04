@@ -1,5 +1,6 @@
+import axios from "axios";
 import useSWR from "swr";
-
+import useSWRMutation from "swr/mutation";
 /**
  * @typedef SalesHistory
  * @property {string} customerName
@@ -30,4 +31,16 @@ export function useSalesHistory() {
   };
 
   return [postProcess(data), isLoading, error];
+}
+
+export function useCreateInvoice() {
+  const createInvoice = async (url, { arg: data }) =>
+    axios.post(url, data).then((resp) => resp.data);
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    "sales/create",
+    createInvoice,
+  );
+
+  return [trigger, isMutating, error];
 }
