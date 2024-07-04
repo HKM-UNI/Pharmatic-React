@@ -23,20 +23,21 @@ export default function ProductFormBasic({ initialOptions, defaultImgSrc }) {
           searchPlaceHolder="Buscar producto"
           selectPlaceHolder="Selecciona producto"
           initialOptions={initialOptions.catalogs}
-          label={
-            <>
-              Nombre producto &ensp;
-              <Button
-                type="button"
-                variant="link"
-                className="m-0 ml-2 p-0"
-                size="sm"
-                onClick={() => alert("hola")}
-              >
-                Agregar +
-              </Button>
-            </>
-          }
+          label="Nombre Producto"
+          // {
+          //   <>
+          //     Nombre producto &ensp;
+          //     <Button
+          //       type="button"
+          //       variant="link"
+          //       className="m-0 ml-2 p-0"
+          //       size="sm"
+          //       onClick={() => alert("hola")}
+          //     >
+          //       Agregar +
+          //     </Button>
+          //   </>
+          // }
           optionMapper={(c) => ({ label: c.name, value: c.catalogNo })}
         />
 
