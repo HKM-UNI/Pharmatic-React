@@ -8,9 +8,11 @@ import useSWRMutation from "swr/mutation";
  * @returns {[Product, Error]}
  */
 export function useProductData(productNo) {
-  const { data, error } = useSWR(productNo ? `products/${productNo}` : null);
+  const { data, isLoading, error, mutate } = useSWR(
+    productNo ? `products/${productNo}` : null,
+  );
 
-  return [data, error];
+  return [data, isLoading, error, mutate];
 }
 
 /**
