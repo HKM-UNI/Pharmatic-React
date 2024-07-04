@@ -210,3 +210,26 @@ export function useInitialFormOptions(productData) {
 
   return state;
 }
+
+/**
+ * Deletes a customer via API
+ * @async
+ * @callback productDeleteTrigger
+ * @param {number} id
+ * @returns {Promise}
+ */
+
+/**
+ * @returns {[productDeleteTrigger, boolean, Error | null | undefined]}
+ */
+export function useDeleteProduct() {
+  const deleteCustomer = async (url, { arg: id }) =>
+    axios.delete(url.replace("delete_id", id));
+
+  const { trigger, isMutating, error } = useSWRMutation(
+    `products/delete_id`,
+    deleteCustomer,
+  );
+
+  return [trigger, isMutating, error];
+}

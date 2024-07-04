@@ -35,7 +35,7 @@ export function UserForm({ edit = false }) {
       "producData" también puede ser "undefined" o "null"
       y debe ser validado en cualquier parte.
   */
-  const [userData, errorOnUserData] = useUserData(username);
+  const [userData, _, errorOnUserData] = useUserData(username);
 
   // Opciones iniciales para los LazyFormComboBox
   const initialOpts = useInitialFormOptions(userData);

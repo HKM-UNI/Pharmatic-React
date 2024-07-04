@@ -38,7 +38,8 @@ export function ProductForm({ edit = false }) {
       "producData" también puede ser "undefined" o "null"
       y debe ser validado en cualquier parte.
   */
-  const [productData, errorOnProductData] = useProductData(productId);
+  const [productData, _, errorOnProductData] =
+    useProductData(productId);
 
   // Opciones iniciales para los LazyFormComboBox
   const initialOpts = useInitialFormOptions(productData);
