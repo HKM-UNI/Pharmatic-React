@@ -4,9 +4,11 @@ import DynamicPanel from "@/shared/DynamicPanel";
 import React from "react";
 import LoadingPanel from "./LoadingPanel";
 import { SquarePen, Trash } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Users() {
-  const [users, isLoading, error, updateUserList] = useUsers();
+  const navigate = useNavigate();
+  const [users, isLoading, error] = useUsers();
 
   if (error) {
     return <Error message="Failed to fetch users." />;
@@ -19,7 +21,9 @@ export default function Users() {
     <DynamicPanel
       rightActions={
         <>
-          <Button>Crear nuevo usuario</Button>
+          <Button onClick={() => navigate("/usuarios/agregar")}>
+            Crear nuevo usuario
+          </Button>
         </>
       }
     >
@@ -32,7 +36,7 @@ export default function Users() {
               <>
                 <p>{u.username}</p>
                 <p className="font-semibold">{u.email}</p>
-                <p className="font-normal">{u.role.roleName}</p>
+                <p className="font-normal">{u.role?.roleName}</p>
               </>
             }
             actions={
@@ -48,6 +52,7 @@ export default function Users() {
                   size="icon"
                   className="rounded-full border-transparent bg-transparent hover:bg-white"
                   variant="outline"
+                  onClick={() => navigate(`/usuarios/editar/${u.username}`)}
                 >
                   <SquarePen
                     className="h-3 w-3 md:h-5 md:w-5"

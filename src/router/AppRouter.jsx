@@ -14,6 +14,7 @@ import PublicRoute from "./PublicRoute";
 import Users from "@/pages/Users";
 import Cart from "@/pages/Cart";
 import Invoicing from "@/pages/Invoicing";
+import { UserForm } from "@/pages/forms/users_form";
 
 export function AppRouter() {
   return (
@@ -49,12 +50,24 @@ const MainContentRoutes = () => (
     <Route path="usuarios" element={<Users />} />
     <Route path="ventas/carrito" element={<Cart />} />
     <Route path="ventas/facturacion" element={<Invoicing />} />
+    {UserRoutes()}
     {SalesRoutes()}
     {CustomerRoutes()}
     {ProviderRoutes()}
     {ProductRoutes()}
     {MetaDataRoutes()}
     <Route path="*" element={<NotFound />} />
+  </>
+);
+
+const UserRoutes = () => (
+  <>
+    <Route path="usuarios" element={<Users />} />
+    <Route path="usuarios/agregar" element={<UserForm />} />
+    <Route
+      path="usuarios/editar/:username"
+      element={<UserForm edit={true} />}
+    />
   </>
 );
 
