@@ -5,8 +5,21 @@ import { useNavigate } from "react-router-dom";
 import DynamicPanel from "@/shared/DynamicPanel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useContext } from "react";
+import { AuthContext } from "@/auth";
 
 function Products() {
+  const { checkScopes } = useContext(AuthContext);
+
+  const hasDeletePermissions = checkScopes(["customer:delete"]);
+  const hasWritePermissions = checkScopes(["customer:write"]);
+
+  const onClickProps = {
+    onClick: hasWritePermissions
+      ? () => navigate(`/productos/editar/${p.productNo}`)
+      : () => {},
+  };
+
   const navigate = useNavigate();
   const [products, isLoading, error] = useProducts();
 
@@ -22,9 +35,11 @@ function Products() {
     <DynamicPanel
       rightActions={
         <>
-          <Button onClick={() => navigate("/productos/agregar")}>
-            Agregar
-          </Button>
+          {!hasWritePermissions ? null : (
+            <Button onClick={() => navigate("/productos/agregar")}>
+              Agregar
+            </Button>
+          )}
         </>
       }
     >
@@ -48,7 +63,8 @@ function Products() {
                 </div>
               </>
             }
-            onClick={() => navigate(`/productos/editar/${p.productNo}`)}
+            {...onClickProps}
+            // onClick={() => navigate(`/productos/editar/${p.productNo}`)}
           />
         ))}
       </div>

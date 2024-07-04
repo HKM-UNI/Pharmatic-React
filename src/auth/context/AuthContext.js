@@ -12,9 +12,16 @@ import { createContext } from "react";
  */
 
 /**
+ * @callback CheckScopesCallback
+ * @param {string[]} scope_list
+ * @returns {boolean}
+ */
+
+/**
  * @typedef authFunctions
  * @property {loginRequest} login
  * @property {logoutRequest} logout
+ * @property {CheckScopesCallback} checkScopes
  */
 
 /**
@@ -24,6 +31,7 @@ export const initialAuthState = {
   logged: false,
   loggingIn: false,
   user: null,
+  checkScopes: (_) => {},
   login: (data = {}) => {},
   logout: () => {},
 };

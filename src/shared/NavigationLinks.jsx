@@ -13,6 +13,8 @@ import {
   Setting3Icon,
   UserIcon,
 } from "/src/icons";
+import { useContext } from "react";
+import { AuthContext } from "@/auth";
 
 const pharmaticLink =
   "flex items-center pl-5 py-2 transition-all duration-300 w-[90%] text-md";
@@ -34,80 +36,117 @@ const getLinkStyle = (isActive, isSubLink = false) =>
   }`;
 
 function NavigationLinks() {
+  const { checkScopes } = useContext(AuthContext);
+
+  const hasDashboardPermissions = checkScopes([
+    "customer:read",
+    "provider:read",
+    "product:read",
+    "sales:read",
+    "purchase:read",
+  ]);
+
+  const hasSalesReadPermissions = checkScopes(["sales:read"]);
+  const hasSalesWritePermissions = checkScopes(["sales:write"]);
+  const hasProductPermissions = checkScopes(["product:read"]);
+  const hasCustomerPermissions = checkScopes(["customer:read"]);
+  const hasProviderPermissions = checkScopes(["provider:read"]);
+  const hasUserPermissions = checkScopes(["user:read"]);
+
   return (
     <nav className="flex flex-col space-y-2">
-      <NavLink
-        to="/dashboard"
-        className={({ isActive }) => getLinkStyle(isActive)}
-      >
-        <DashBoardIcon className="mr-3 h-6 w-6" />
-        Dashboard
-      </NavLink>
+      {!hasDashboardPermissions ? null : (
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) => getLinkStyle(isActive)}
+        >
+          <DashBoardIcon className="mr-3 h-6 w-6" />
+          Dashboard
+        </NavLink>
+      )}
 
-      <div className={groupLinkTextStyle}>
-        <DropBoxIcon className="mr-3 h-6 w-6" />
-        Ventas
-      </div>
+      {!(hasSalesReadPermissions && hasSalesWritePermissions) ? null : (
+        <>
+          <div className={groupLinkTextStyle}>
+            <DropBoxIcon className="mr-3 h-6 w-6" />
+            Ventas
+          </div>
 
-      <NavLink
-        to="/ventas/carrito"
-        className={({ isActive }) => getLinkStyle(isActive, true)}
-      >
-        <ShoppingCartIcon className="mr-3 h-6 w-6" />
-        Nueva venta
-      </NavLink>
+          {!hasSalesWritePermissions ? null : (
+            <NavLink
+              to="/ventas/carrito"
+              className={({ isActive }) => getLinkStyle(isActive, true)}
+            >
+              <ShoppingCartIcon className="mr-3 h-6 w-6" />
+              Nueva venta
+            </NavLink>
+          )}
 
-      <NavLink
-        to="/ventas/reciente"
-        className={({ isActive }) => getLinkStyle(isActive, true)}
-      >
-        <PresentionChartIcon className="mr-3 h-6 w-6" />
-        Últimas ventas
-      </NavLink>
+          {!hasSalesReadPermissions ? null : (
+            <NavLink
+              to="/ventas/reciente"
+              className={({ isActive }) => getLinkStyle(isActive, true)}
+            >
+              <PresentionChartIcon className="mr-3 h-6 w-6" />
+              Últimas ventas
+            </NavLink>
+          )}
+        </>
+      )}
 
-      <div className={groupLinkTextStyle}>
-        <DropBoxIcon className="mr-3 h-6 w-6" />
-        Inventario
-      </div>
+      {!hasProductPermissions ? null : (
+        <>
+          <div className={groupLinkTextStyle}>
+            <DropBoxIcon className="mr-3 h-6 w-6" />
+            Inventario
+          </div>
 
-      <NavLink
-        to="/productos"
-        className={({ isActive }) => getLinkStyle(isActive, true)}
-      >
-        <BagIcon className="mr-3 h-6 w-6" />
-        Productos
-      </NavLink>
-      <NavLink
-        to="/metadata"
-        className={({ isActive }) => getLinkStyle(isActive, true)}
-      >
-        <Setting3Icon className="mr-3 h-6 w-6" />
-        Metadata
-      </NavLink>
+          <NavLink
+            to="/productos"
+            className={({ isActive }) => getLinkStyle(isActive, true)}
+          >
+            <BagIcon className="mr-3 h-6 w-6" />
+            Productos
+          </NavLink>
+          <NavLink
+            to="/metadata"
+            className={({ isActive }) => getLinkStyle(isActive, true)}
+          >
+            <Setting3Icon className="mr-3 h-6 w-6" />
+            Metadata
+          </NavLink>
+        </>
+      )}
 
-      <NavLink
-        to="/clientes"
-        className={({ isActive }) => getLinkStyle(isActive)}
-      >
-        <ClientIcon className="mr-3 h-6 w-6" />
-        Clientes
-      </NavLink>
+      {!hasCustomerPermissions ? null : (
+        <NavLink
+          to="/clientes"
+          className={({ isActive }) => getLinkStyle(isActive)}
+        >
+          <ClientIcon className="mr-3 h-6 w-6" />
+          Clientes
+        </NavLink>
+      )}
 
-      <NavLink
-        to="/proveedores"
-        className={({ isActive }) => getLinkStyle(isActive)}
-      >
-        <ProvidersIcon className="mr-3 h-6 w-6" />
-        Proveedores
-      </NavLink>
+      {!hasProviderPermissions ? null : (
+        <NavLink
+          to="/proveedores"
+          className={({ isActive }) => getLinkStyle(isActive)}
+        >
+          <ProvidersIcon className="mr-3 h-6 w-6" />
+          Proveedores
+        </NavLink>
+      )}
 
-      <NavLink
-        to="/usuarios"
-        className={({ isActive }) => getLinkStyle(isActive)}
-      >
-        <UserIcon className="mr-3 h-6 w-6" />
-        Usuarios
-      </NavLink>
+      {!hasUserPermissions ? null : (
+        <NavLink
+          to="/usuarios"
+          className={({ isActive }) => getLinkStyle(isActive)}
+        >
+          <UserIcon className="mr-3 h-6 w-6" />
+          Usuarios
+        </NavLink>
+      )}
     </nav>
   );
 }

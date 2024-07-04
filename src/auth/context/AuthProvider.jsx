@@ -105,11 +105,25 @@ export function AuthProvider({ children }) {
     });
   };
 
+  /**
+   * @param {string[]} scope_list
+   * @returns {boolean}
+   */
+  const checkScopes = (scope_list) => {
+    const { scopes } = authState.user;
+    if (!scopes) {
+      return false;
+    }
+
+    return scope_list.every((s) => scopes.includes(s));
+  };
+
   return (
     <AuthContext.Provider
       value={{
         ...authState,
         loggingIn: isLoggingIn,
+        checkScopes: checkScopes,
         login: loginRequest,
         logout: logout,
       }}

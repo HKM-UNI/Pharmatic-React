@@ -13,12 +13,18 @@ import {
   Phone,
   PhoneOff,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DynamicPanel from "@/shared/DynamicPanel";
 import Error from "./Error";
 import LoadingPanel from "./LoadingPanel";
+import { AuthContext } from "@/auth";
 
 export default function Customers() {
+  const { checkScopes } = useContext(AuthContext);
+
+  const hasDeletePermissions = checkScopes(["customer:delete"]);
+  const hasWritePermissions = checkScopes(["customer:write"]);
+
   const navigate = useNavigate();
 
   /* 
@@ -89,7 +95,11 @@ export default function Customers() {
     <DynamicPanel
       rightActions={
         <>
-          <Button onClick={() => navigate("/clientes/agregar")}>Agregar</Button>
+          {!hasWritePermissions ? null : (
+            <Button onClick={() => navigate("/clientes/agregar")}>
+              Agregar
+            </Button>
+          )}
         </>
       }
     >
@@ -127,21 +137,25 @@ export default function Customers() {
             }
             actions={
               <>
-                <Button
-                  className="rounded-3xl"
-                  size="sm"
-                  onClick={() => handleEdit(c.customerNo)}
-                >
-                  Editar
-                </Button>
-                <Button
-                  className="rounded-3xl"
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => setDeletingCustomerId(c.customerNo)}
-                >
-                  {buttonDeleteContent(c.customerNo)}
-                </Button>
+                {!hasWritePermissions ? null : (
+                  <Button
+                    className="rounded-3xl"
+                    size="sm"
+                    onClick={() => handleEdit(c.customerNo)}
+                  >
+                    Editar
+                  </Button>
+                )}
+                {!hasDeletePermissions ? null : (
+                  <Button
+                    className="rounded-3xl"
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setDeletingCustomerId(c.customerNo)}
+                  >
+                    {buttonDeleteContent(c.customerNo)}
+                  </Button>
+                )}
               </>
             }
           />

@@ -8,7 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@/auth";
 
 export default function Users() {
-  const { user: authUser } = useContext(AuthContext);
+  const { user: authUser, checkScopes } = useContext(AuthContext);
+
+  const hasDeletePermissions = checkScopes(["user:delete"]);
+  const hasWritePermissions = checkScopes(["user:write"]);
 
   const navigate = useNavigate();
   const [users, isLoading, error, updateUserList] = useUsers();
@@ -31,9 +34,11 @@ export default function Users() {
     <DynamicPanel
       rightActions={
         <>
-          <Button onClick={() => navigate("/usuarios/agregar")}>
-            Crear nuevo usuario
-          </Button>
+          {!hasWritePermissions ? null : (
+            <Button onClick={() => navigate("/usuarios/agregar")}>
+              Crear nuevo usuario
+            </Button>
+          )}
         </>
       }
     >
@@ -52,25 +57,29 @@ export default function Users() {
               }
               actions={
                 <>
-                  <Button
-                    size="icon"
-                    className="rounded-full border-transparent bg-transparent hover:bg-white"
-                    variant="outline"
-                    onClick={() => handleRemoval(u.username)}
-                  >
-                    <Trash className="h-3 w-3 md:h-5 md:w-5" color="red" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    className="rounded-full border-transparent bg-transparent hover:bg-white"
-                    variant="outline"
-                    onClick={() => navigate(`/usuarios/editar/${u.username}`)}
-                  >
-                    <SquarePen
-                      className="h-3 w-3 md:h-5 md:w-5"
-                      color="hsla(186, 78%, 42%, 1)"
-                    />
-                  </Button>
+                  {!hasDeletePermissions ? null : (
+                    <Button
+                      size="icon"
+                      className="rounded-full border-transparent bg-transparent hover:bg-white"
+                      variant="outline"
+                      onClick={() => handleRemoval(u.username)}
+                    >
+                      <Trash className="h-3 w-3 md:h-5 md:w-5" color="red" />
+                    </Button>
+                  )}
+                  {!hasWritePermissions ? null : (
+                    <Button
+                      size="icon"
+                      className="rounded-full border-transparent bg-transparent hover:bg-white"
+                      variant="outline"
+                      onClick={() => navigate(`/usuarios/editar/${u.username}`)}
+                    >
+                      <SquarePen
+                        className="h-3 w-3 md:h-5 md:w-5"
+                        color="hsla(186, 78%, 42%, 1)"
+                      />
+                    </Button>
+                  )}
                 </>
               }
             />

@@ -14,9 +14,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import LoadingPanel from "./LoadingPanel";
 import Error from "./Error";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/auth";
 
 export default function Providers() {
+  const { checkScopes } = useContext(AuthContext);
+
+  const hasDeletePermissions = checkScopes(["provider:delete"]);
+  const hasWritePermissions = checkScopes(["provider:write"]);
+
   const navigate = useNavigate();
   const [providers, isLoading, error, updateProviderList] = useProviders();
   const [deleteProvider, isDeleting] = useDeleteProvider();
@@ -55,9 +61,11 @@ export default function Providers() {
     <DynamicPanel
       rightActions={
         <>
-          <Button onClick={() => navigate("/proveedores/agregar")}>
-            Agregar
-          </Button>
+          {!hasWritePermissions ? null : (
+            <Button onClick={() => navigate("/proveedores/agregar")}>
+              Agregar
+            </Button>
+          )}
         </>
       }
     >
@@ -81,21 +89,25 @@ export default function Providers() {
             }
             actions={
               <>
-                <Button
-                  className="rounded-3xl"
-                  size="sm"
-                  onClick={() => handleEdit(p.providerNo)}
-                >
-                  Editar
-                </Button>
-                <Button
-                  className="rounded-3xl"
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => setDeletingProviderId(p.providerNo)}
-                >
-                  {buttonDeleteContent(p.providerNo)}
-                </Button>
+                {!hasWritePermissions ? null : (
+                  <Button
+                    className="rounded-3xl"
+                    size="sm"
+                    onClick={() => handleEdit(p.providerNo)}
+                  >
+                    Editar
+                  </Button>
+                )}
+                {!hasDeletePermissions ? null : (
+                  <Button
+                    className="rounded-3xl"
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setDeletingProviderId(p.providerNo)}
+                  >
+                    {buttonDeleteContent(p.providerNo)}
+                  </Button>
+                )}
               </>
             }
           />

@@ -28,7 +28,7 @@ export function LoginForm() {
 
   const onLogin = async (data) => {
     await login(data);
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const form = useForm({
