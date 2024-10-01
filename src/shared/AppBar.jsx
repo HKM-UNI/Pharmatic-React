@@ -8,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 
 import {
   DropdownMenu,
@@ -17,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LogoutIcon } from "@/icons";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -42,10 +44,34 @@ function AppBar({ children }) {
         </Breadcrumb>
       </div>
 
-      <UserCard />
+      <div className="flex flex-row items-center gap-3">
+        <UserCard />
+        <LogoutButton />
+      </div>
     </div>
   );
 }
+
+const LogoutButton = () => {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  return (
+    <Button
+      id="logout-button"
+      variant="outline"
+      size="icon"
+      onClick={handleLogout}
+    >
+      <LogoutIcon />
+    </Button>
+  );
+};
 
 function UserCard() {
   const { user, logout } = useContext(AuthContext);
